@@ -12,8 +12,14 @@ DATA_PATH_INPUT="${DATA_PATH:-}"
 DATA_PATH=""
 FORCE_NPM_INSTALL="${FORCE_NPM_INSTALL:-0}"
 SHARED_STORAGE_READY=0
-NPM_HEARTBEAT_SECONDS="${NPM_HEARTBEAT_SECONDS:-15}"
+NPM_HEARTBEAT_SECONDS="${NPM_HEARTBEAT_SECONDS:-10}"
+NPM_INSTALL_TIMEOUT_SECONDS="${NPM_INSTALL_TIMEOUT_SECONDS:-900}"
 NPM_CACHE_DIR="${NPM_CACHE_DIR:-$HOME/.npm}"
+NPM_FETCH_RETRIES="${NPM_FETCH_RETRIES:-2}"
+NPM_FETCH_RETRY_MINTIMEOUT="${NPM_FETCH_RETRY_MINTIMEOUT:-2000}"
+NPM_FETCH_RETRY_MAXTIMEOUT="${NPM_FETCH_RETRY_MAXTIMEOUT:-20000}"
+NPM_FETCH_TIMEOUT="${NPM_FETCH_TIMEOUT:-60000}"
+NPM_LOG_TAIL_LINES="${NPM_LOG_TAIL_LINES:-80}"
 
 is_termux_env() {
   if command -v pkg >/dev/null 2>&1; then
@@ -58,7 +64,12 @@ run_with_heartbeat() {
   local start_ts
   local pid
   local rc
+  local timeout=0
   start_ts="$(date +%s)"
+  case "$NPM_INSTALL_TIMEOUT_SECONDS" in
+    ''|*[!0-9]*) timeout=0 ;;
+    *) timeout="$NPM_INSTALL_TIMEOUT_SECONDS" ;;
+  esac
 
   "$@" &
   pid=$!
@@ -72,11 +83,45 @@ run_with_heartbeat() {
     now_ts="$(date +%s)"
     elapsed=$((now_ts - start_ts))
     echo "npm install in progress... ${elapsed}s elapsed"
+
+    if [ "$timeout" -gt 0 ] && [ "$elapsed" -ge "$timeout" ]; then
+      echo "ERROR: npm install exceeded timeout (${timeout}s), terminating process..."
+      kill "$pid" 2>/dev/null || true
+      sleep 1
+      kill -9 "$pid" 2>/dev/null || true
+      wait "$pid" 2>/dev/null || true
+      return 124
+    fi
   done
 
   wait "$pid"
   rc=$?
   return "$rc"
+}
+
+show_npm_install_diagnostics() {
+  local latest_npm_log=""
+  latest_npm_log="$(ls -1t "$NPM_CACHE_DIR"/_logs/*-debug-0.log 2>/dev/null | head -n 1 || true)"
+  if [ -n "$latest_npm_log" ]; then
+    echo "--- npm log tail: $latest_npm_log ---"
+    tail -n "$NPM_LOG_TAIL_LINES" "$latest_npm_log" || true
+  fi
+}
+
+verify_runtime_dependencies() {
+  local missing=()
+  local dep
+  for dep in next react react-dom; do
+    if [ ! -d "$APP_DIR/node_modules/$dep" ]; then
+      missing+=("$dep")
+    fi
+  done
+
+  if [ "${#missing[@]}" -gt 0 ]; then
+    echo "ERROR: missing runtime dependencies after install: ${missing[*]}"
+    return 1
+  fi
+  return 0
 }
 
 dependency_signature() {
@@ -114,6 +159,7 @@ dependency_signature() {
 install_node_dependencies() {
   local stamp_file="$APP_DIR/.deps-installed.sig"
   local sig_current
+  local sig_after
   local sig_saved=""
   local use_npm_ci=0
   local npm_base_args=(
@@ -134,13 +180,16 @@ install_node_dependencies() {
 
   if [ -f "$APP_DIR/package-lock.json" ]; then
     use_npm_ci=1
+  else
+    echo "WARN: package-lock.json not found; first install may be slower."
   fi
 
   mkdir -p "$NPM_CACHE_DIR"
   export npm_config_cache="$NPM_CACHE_DIR"
-  export npm_config_fetch_retries="${NPM_FETCH_RETRIES:-4}"
-  export npm_config_fetch_retry_mintimeout="${NPM_FETCH_RETRY_MINTIMEOUT:-10000}"
-  export npm_config_fetch_retry_maxtimeout="${NPM_FETCH_RETRY_MAXTIMEOUT:-120000}"
+  export npm_config_fetch_retries="$NPM_FETCH_RETRIES"
+  export npm_config_fetch_retry_mintimeout="$NPM_FETCH_RETRY_MINTIMEOUT"
+  export npm_config_fetch_retry_maxtimeout="$NPM_FETCH_RETRY_MAXTIMEOUT"
+  export npm_config_fetch_timeout="$NPM_FETCH_TIMEOUT"
 
   if [ "$use_npm_ci" = "1" ]; then
     echo "Installing dependencies with: npm ci ${npm_base_args[*]}"
@@ -150,11 +199,19 @@ install_node_dependencies() {
 
   cd "$APP_DIR"
   if [ "$use_npm_ci" = "1" ]; then
-    run_with_heartbeat npm ci "${npm_base_args[@]}"
+    if ! run_with_heartbeat npm ci "${npm_base_args[@]}"; then
+      show_npm_install_diagnostics
+      return 1
+    fi
   else
-    run_with_heartbeat npm install "${npm_base_args[@]}"
+    if ! run_with_heartbeat npm install "${npm_base_args[@]}"; then
+      show_npm_install_diagnostics
+      return 1
+    fi
   fi
-  echo "$sig_current" >"$stamp_file"
+  verify_runtime_dependencies
+  sig_after="$(dependency_signature)"
+  echo "$sig_after" >"$stamp_file"
 }
 
 show_runtime_diagnostics() {
