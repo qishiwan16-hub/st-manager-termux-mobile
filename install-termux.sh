@@ -322,13 +322,21 @@ install_node_dependencies() {
 ensure_webpack_runtime() {
   local runtime_file="$APP_DIR/.next/server/webpack-runtime.js"
   local rebuild_runtime=0
+  local helper missing_helpers=()
 
   if [ ! -f "$runtime_file" ]; then
     echo "WARN: missing $runtime_file, creating fallback runtime"
     rebuild_runtime=1
-  elif ! grep -q "__webpack_require__\\.t" "$runtime_file"; then
-    echo "WARN: detected incompatible webpack runtime, rebuilding fallback runtime"
-    rebuild_runtime=1
+  else
+    for helper in t g e u f amdO; do
+      if ! grep -q "__webpack_require__\\.${helper}" "$runtime_file"; then
+        missing_helpers+=("$helper")
+      fi
+    done
+    if [ "${#missing_helpers[@]}" -gt 0 ]; then
+      echo "WARN: detected incompatible webpack runtime (missing: ${missing_helpers[*]}), rebuilding fallback runtime"
+      rebuild_runtime=1
+    fi
   fi
 
   if [ "$rebuild_runtime" -eq 0 ]; then
@@ -376,6 +384,19 @@ __webpack_require__.n = (module) => {
   __webpack_require__.d(getter, { a: getter });
   return getter;
 };
+__webpack_require__.g = (() => {
+  if (typeof globalThis === "object") {
+    return globalThis;
+  }
+  try {
+    return this || Function("return this")();
+  } catch {
+    if (typeof window === "object") {
+      return window;
+    }
+  }
+  return {};
+})();
 __webpack_require__.t = (value, mode) => {
   if (mode & 1) {
     value = __webpack_require__(value);
@@ -402,6 +423,10 @@ __webpack_require__.t = (value, mode) => {
   __webpack_require__.d(namespace, definition);
   return namespace;
 };
+__webpack_require__.f = Object.create(null);
+__webpack_require__.e = () => Promise.resolve();
+__webpack_require__.u = (chunkId) => `${chunkId}.js`;
+__webpack_require__.amdO = {};
 function registerChunk(chunk) {
   if (!chunk || typeof chunk !== "object") return;
   if (chunk.modules && typeof chunk.modules === "object") {

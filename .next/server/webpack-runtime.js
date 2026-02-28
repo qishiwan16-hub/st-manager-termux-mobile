@@ -51,6 +51,20 @@ __webpack_require__.n = (module) => {
   return getter;
 };
 
+__webpack_require__.g = (() => {
+  if (typeof globalThis === "object") {
+    return globalThis;
+  }
+  try {
+    return this || Function("return this")();
+  } catch {
+    if (typeof window === "object") {
+      return window;
+    }
+  }
+  return {};
+})();
+
 __webpack_require__.t = (value, mode) => {
   if (mode & 1) {
     value = __webpack_require__(value);
@@ -77,6 +91,11 @@ __webpack_require__.t = (value, mode) => {
   __webpack_require__.d(namespace, definition);
   return namespace;
 };
+
+__webpack_require__.f = Object.create(null);
+__webpack_require__.e = () => Promise.resolve();
+__webpack_require__.u = (chunkId) => `${chunkId}.js`;
+__webpack_require__.amdO = {};
 
 function registerChunk(chunk) {
   if (!chunk || typeof chunk !== "object") {
