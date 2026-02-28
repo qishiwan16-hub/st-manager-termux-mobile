@@ -27,6 +27,10 @@ fi
 
 export DATA_ROOT="${DATA_ROOT:-${CONFIG_DATA_ROOT:-$HOME/.st-manager/data/default-user}}"
 
+if command -v node >/dev/null 2>&1; then
+  node "$APP_DIR/scripts/sanitize-prerender.js" "$APP_DIR" settings worlds || true
+fi
+
 LOG_FILE="$LOG_DIR/app-$DATE_TAG.log"
 
 PORT_PID=""
