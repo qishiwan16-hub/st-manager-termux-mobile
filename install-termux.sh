@@ -1,4 +1,4 @@
-#!/data/data/com.termux/files/usr/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
 REPO_URL="${REPO_URL:-https://github.com/qishiwan16-hub/st-manager-termux-mobile.git}"
@@ -13,6 +13,45 @@ FORCE_NPM_INSTALL="${FORCE_NPM_INSTALL:-0}"
 SHARED_STORAGE_READY=0
 NPM_HEARTBEAT_SECONDS="${NPM_HEARTBEAT_SECONDS:-15}"
 NPM_CACHE_DIR="${NPM_CACHE_DIR:-$HOME/.npm}"
+
+is_termux_env() {
+  if command -v pkg >/dev/null 2>&1; then
+    return 0
+  fi
+  case "${PREFIX:-}" in
+    */com.termux/*) return 0 ;;
+  esac
+  return 1
+}
+
+install_base_packages() {
+  if is_termux_env; then
+    echo "Detected Termux environment; using pkg."
+    pkg update -y
+    pkg upgrade -y
+    pkg install -y nodejs-lts git curl jq tmux termux-api termux-services lsof cronie
+    return 0
+  fi
+
+  if ! command -v apt-get >/dev/null 2>&1; then
+    echo "ERROR: this installer supports Termux (pkg) or Debian/Ubuntu-like systems (apt-get)."
+    exit 1
+  fi
+
+  local sudo_cmd=""
+  if [ "${EUID:-$(id -u)}" -ne 0 ]; then
+    if command -v sudo >/dev/null 2>&1; then
+      sudo_cmd="sudo"
+    else
+      echo "ERROR: apt-get needs root privileges; run as root or install sudo."
+      exit 1
+    fi
+  fi
+
+  echo "Detected non-Termux environment; using apt-get compatibility mode."
+  $sudo_cmd apt-get update -y
+  $sudo_cmd apt-get install -y nodejs npm git curl jq tmux lsof cron ca-certificates
+}
 
 run_with_heartbeat() {
   local start_ts
@@ -315,10 +354,8 @@ resolve_data_path() {
 }
 
 if [ "$INSTALL_STAGE" = "bootstrap" ]; then
-  echo "[1/3] Install Termux base packages"
-  pkg update -y
-  pkg upgrade -y
-  pkg install -y nodejs-lts git curl jq tmux termux-api termux-services lsof cronie
+  echo "[1/3] Install base packages (compat mode)"
+  install_base_packages
 
   echo "[2/3] Pull latest code from GitHub"
   sync_repo_from_github
