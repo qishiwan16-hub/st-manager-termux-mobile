@@ -77,6 +77,19 @@ install_node_dependencies() {
   echo "$sig_current" >"$stamp_file"
 }
 
+show_runtime_diagnostics() {
+  local latest_log=""
+  echo "--- app-config.json ---"
+  cat "$APP_DIR/app-config.json" || true
+  echo "--- status ---"
+  PORT="$PORT" bash "$APP_DIR/scripts/status.sh" || true
+  latest_log="$(ls -1t "$APP_DIR"/logs/app-*.log 2>/dev/null | head -n 1 || true)"
+  if [ -n "${latest_log:-}" ]; then
+    echo "--- tail: $latest_log ---"
+    tail -n 120 "$latest_log" || true
+  fi
+}
+
 ensure_webpack_runtime() {
   local runtime_file="$APP_DIR/.next/server/webpack-runtime.js"
   if [ -f "$runtime_file" ]; then
@@ -294,19 +307,26 @@ chmod +x scripts/*.sh
 chmod +x termux/runit/st-manager/run termux/runit/st-manager/log/run
 
 echo "[5/6] Start service and run healthcheck"
-ST_MANAGER_HOST="$HOST" PORT="$PORT" NODE_ENV=production DATA_ROOT="$DATA_PATH" bash scripts/start.sh
+PORT="$PORT" bash scripts/stop.sh >/dev/null 2>&1 || true
+if ! ST_MANAGER_HOST="$HOST" PORT="$PORT" NODE_ENV=production DATA_ROOT="$DATA_PATH" bash scripts/start.sh; then
+  echo
+  echo "Initial start failed. Dumping diagnostics..."
+  show_runtime_diagnostics
+  latest_log="$(ls -1t "$APP_DIR"/logs/app-*.log 2>/dev/null | head -n 1 || true)"
+  if [ -n "${latest_log:-}" ] && grep -Eq "EADDRINUSE|address already in use" "$latest_log"; then
+    echo
+    echo "Detected port conflict, attempting one automatic restart..."
+    PORT="$PORT" bash scripts/stop.sh >/dev/null 2>&1 || true
+    sleep 1
+    ST_MANAGER_HOST="$HOST" PORT="$PORT" NODE_ENV=production DATA_ROOT="$DATA_PATH" bash scripts/start.sh
+  else
+    exit 1
+  fi
+fi
 if ! ST_MANAGER_HOST="$HOST" PORT="$PORT" RETRY_COUNT=12 RETRY_DELAY=2 bash scripts/healthcheck.sh; then
   echo
   echo "Healthcheck failed. Dumping quick diagnostics..."
-  echo "--- app-config.json ---"
-  cat "$APP_DIR/app-config.json" || true
-  echo "--- status ---"
-  PORT="$PORT" bash "$APP_DIR/scripts/status.sh" || true
-  latest_log="$(ls -1t "$APP_DIR"/logs/app-*.log 2>/dev/null | head -n 1 || true)"
-  if [ -n "${latest_log:-}" ]; then
-    echo "--- tail: $latest_log ---"
-    tail -n 120 "$latest_log" || true
-  fi
+  show_runtime_diagnostics
   echo "--- curl /api/config ---"
   curl -i -sS --max-time 10 "http://127.0.0.1:${PORT}/api/config" || true
   echo

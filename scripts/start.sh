@@ -29,6 +29,21 @@ export DATA_ROOT="${DATA_ROOT:-${CONFIG_DATA_ROOT:-$HOME/.st-manager/data/defaul
 
 LOG_FILE="$LOG_DIR/app-$DATE_TAG.log"
 
+PORT_PID=""
+if command -v lsof >/dev/null 2>&1; then
+  PORT_PID="$(lsof -ti tcp:"$PORT" -sTCP:LISTEN 2>/dev/null | head -n 1 || true)"
+fi
+
+if [ -n "${PORT_PID:-}" ]; then
+  if command -v curl >/dev/null 2>&1 && curl -fsS --max-time 3 "http://127.0.0.1:${PORT}/api/config" >/dev/null 2>&1; then
+    echo "$PORT_PID" >"$PID_FILE"
+    echo "st-manager already running on port $PORT (pid=$PORT_PID)."
+    exit 0
+  fi
+  echo "port $PORT already in use by pid=$PORT_PID, refusing to start"
+  exit 1
+fi
+
 (
   cd "$APP_DIR"
   nohup node server.js >>"$LOG_FILE" 2>&1 &
@@ -43,4 +58,7 @@ if kill -0 "$(cat "$PID_FILE")" 2>/dev/null; then
 fi
 
 echo "st-manager failed to start, check $LOG_FILE"
+if [ -f "$LOG_FILE" ]; then
+  tail -n 40 "$LOG_FILE" || true
+fi
 exit 1
