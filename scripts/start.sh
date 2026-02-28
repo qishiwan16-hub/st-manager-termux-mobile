@@ -20,12 +20,116 @@ export HOSTNAME="${ST_MANAGER_HOST:-127.0.0.1}"
 export PORT="${PORT:-3456}"
 export NODE_ENV="${NODE_ENV:-production}"
 
+verify_runtime_dependencies() {
+  (
+    cd "$APP_DIR"
+    node -e 'for (const m of ["next", "react", "react-dom"]) require.resolve(m)'
+  ) >/dev/null 2>&1
+}
+
+install_runtime_dependencies() {
+  local npm_cache_dir npm_registry_primary npm_registry_fallback registry
+  local npm_fetch_retries npm_fetch_retry_mintimeout npm_fetch_retry_maxtimeout npm_fetch_timeout
+  local npm_args attempt max_attempts use_npm_ci install_rc
+
+  npm_cache_dir="${NPM_CACHE_DIR:-$APP_DIR/.npm-cache}"
+  npm_registry_primary="${NPM_REGISTRY_PRIMARY:-https://registry.npmjs.org/}"
+  npm_registry_fallback="${NPM_REGISTRY_FALLBACK:-https://registry.npmmirror.com/}"
+  npm_fetch_retries="${NPM_FETCH_RETRIES:-2}"
+  npm_fetch_retry_mintimeout="${NPM_FETCH_RETRY_MINTIMEOUT:-2000}"
+  npm_fetch_retry_maxtimeout="${NPM_FETCH_RETRY_MAXTIMEOUT:-20000}"
+  npm_fetch_timeout="${NPM_FETCH_TIMEOUT:-60000}"
+
+  npm_args=(
+    "--omit=dev"
+    "--no-audit"
+    "--fund=false"
+    "--prefer-offline"
+    "--progress=false"
+  )
+
+  max_attempts=1
+  if [ -n "${npm_registry_fallback:-}" ] && [ "$npm_registry_fallback" != "$npm_registry_primary" ]; then
+    max_attempts=2
+  fi
+
+  use_npm_ci=0
+  if [ -f "$APP_DIR/package-lock.json" ]; then
+    use_npm_ci=1
+  fi
+
+  mkdir -p "$npm_cache_dir"
+
+  (
+    cd "$APP_DIR"
+    export npm_config_cache="$npm_cache_dir"
+    export npm_config_fetch_retries="$npm_fetch_retries"
+    export npm_config_fetch_retry_mintimeout="$npm_fetch_retry_mintimeout"
+    export npm_config_fetch_retry_maxtimeout="$npm_fetch_retry_maxtimeout"
+    export npm_config_fetch_timeout="$npm_fetch_timeout"
+
+    install_rc=1
+    attempt=1
+    while [ "$attempt" -le "$max_attempts" ]; do
+      registry="$npm_registry_primary"
+      if [ "$attempt" -eq 2 ]; then
+        registry="$npm_registry_fallback"
+      fi
+      export npm_config_registry="$registry"
+
+      if [ "$use_npm_ci" -eq 1 ]; then
+        echo "Installing runtime dependencies via npm ci (attempt $attempt/$max_attempts, registry=$registry)"
+        npm ci "${npm_args[@]}" && install_rc=0 || install_rc=$?
+      else
+        echo "Installing runtime dependencies via npm install (attempt $attempt/$max_attempts, registry=$registry)"
+        npm install "${npm_args[@]}" && install_rc=0 || install_rc=$?
+      fi
+
+      if [ "$install_rc" -eq 0 ]; then
+        break
+      fi
+      attempt=$((attempt + 1))
+    done
+
+    return "$install_rc"
+  )
+}
+
+ensure_runtime_dependencies() {
+  if verify_runtime_dependencies; then
+    return 0
+  fi
+
+  echo "WARN: missing runtime modules (next/react/react-dom), attempting auto-install..."
+  if ! command -v npm >/dev/null 2>&1; then
+    echo "ERROR: npm is not available. Run: bash install-termux.sh"
+    return 1
+  fi
+
+  if ! install_runtime_dependencies; then
+    echo "ERROR: auto-install failed. Check npm logs under $APP_DIR/.npm-cache/_logs"
+    return 1
+  fi
+
+  if ! verify_runtime_dependencies; then
+    echo "ERROR: dependencies installed but runtime modules are still missing."
+    return 1
+  fi
+
+  echo "Runtime dependencies verified."
+  return 0
+}
+
 CONFIG_DATA_ROOT=""
 if [ -f "$CONFIG_FILE" ] && command -v node >/dev/null 2>&1; then
   CONFIG_DATA_ROOT="$(node -e 'try{const fs=require("fs"); const p=JSON.parse(fs.readFileSync(process.argv[1], "utf8")).dataPath || ""; process.stdout.write(p)}catch{}' "$CONFIG_FILE" 2>/dev/null || true)"
 fi
 
 export DATA_ROOT="${DATA_ROOT:-${CONFIG_DATA_ROOT:-$HOME/.st-manager/data/default-user}}"
+
+if ! ensure_runtime_dependencies; then
+  exit 1
+fi
 
 if command -v node >/dev/null 2>&1; then
   node "$APP_DIR/scripts/sanitize-prerender.js" "$APP_DIR" settings worlds || true
