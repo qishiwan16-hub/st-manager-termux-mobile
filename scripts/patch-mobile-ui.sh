@@ -78,24 +78,72 @@ trim_trailing_blank_lines() {
   ' "$target_file"
 }
 
+css_version_stamp() {
+  local target_file="$1"
+  local stamp=""
+
+  if command -v stat >/dev/null 2>&1; then
+    stamp="$(stat -c %Y "$target_file" 2>/dev/null || true)"
+    if [ -z "$stamp" ]; then
+      stamp="$(stat -f %m "$target_file" 2>/dev/null || true)"
+    fi
+  fi
+
+  if [ -z "$stamp" ]; then
+    stamp="$(date +%s)"
+  fi
+
+  printf '%s' "$stamp"
+}
+
+sync_html_css_cache_bust() {
+  local css_file="$1"
+  local mode="$2"
+  local stamp html_file tmp_file
+
+  stamp="$(css_version_stamp "$css_file")"
+
+  while IFS= read -r html_file; do
+    [ -n "$html_file" ] || continue
+
+    tmp_file="$(mktemp "${html_file}.tmp.XXXXXX")"
+
+    # First normalize old patch query markers.
+    sed -E 's#(/_next/static/css/[^"?]+\.css)\?v=[0-9]+#\1#g' "$html_file" >"$tmp_file"
+
+    if [ "$mode" = "apply" ]; then
+      sed -E "s#(/_next/static/css/[^\"?]+\\.css)#\\1?v=${stamp}#g" "$tmp_file" >"${tmp_file}.next"
+      mv "${tmp_file}.next" "$tmp_file"
+    fi
+
+    if cmp -s "$html_file" "$tmp_file"; then
+      rm -f "$tmp_file"
+      continue
+    fi
+
+    chmod --reference="$html_file" "$tmp_file" 2>/dev/null || true
+    mv "$tmp_file" "$html_file"
+  done < <(find "$APP_DIR/.next/server/app" -type f -name '*.html' 2>/dev/null | sort)
+}
+
 append_patch_block() {
   cat <<'PATCH_EOF'
 /* ST_MOBILE_UI_START */
-@media (max-width: 900px) {
+@media (max-width: 900px), (hover: none) and (pointer: coarse) {
   html,
   body {
     height: 100%;
     overflow: hidden;
   }
 
-  body > .flex.h-screen.overflow-hidden {
+  body .flex.h-screen.overflow-hidden {
     display: flex;
     flex-direction: column;
     height: 100dvh;
     overflow: hidden;
   }
 
-  body > .flex.h-screen.overflow-hidden > aside {
+  body .flex.h-screen.overflow-hidden > aside {
     width: 100% !important;
     max-width: none !important;
     min-height: 0;
@@ -103,13 +151,13 @@ append_patch_block() {
     border-bottom: 1px solid hsl(var(--sidebar-border));
   }
 
-  body > .flex.h-screen.overflow-hidden > aside > .flex.items-center.h-14.px-4.border-b {
+  body .flex.h-screen.overflow-hidden > aside > .flex.items-center.h-14.px-4.border-b {
     height: 3.25rem;
     padding: 0 0.75rem;
     border-bottom: 0;
   }
 
-  body > .flex.h-screen.overflow-hidden > aside > .flex.items-center.h-14.px-4.border-b h1 {
+  body .flex.h-screen.overflow-hidden > aside > .flex.items-center.h-14.px-4.border-b h1 {
     font-size: 1rem;
     max-width: 70vw;
     overflow: hidden;
@@ -117,7 +165,7 @@ append_patch_block() {
     white-space: nowrap;
   }
 
-  body > .flex.h-screen.overflow-hidden > aside nav {
+  body .flex.h-screen.overflow-hidden > aside nav {
     display: flex;
     flex: 0 0 auto;
     gap: 0.375rem;
@@ -129,54 +177,54 @@ append_patch_block() {
     -webkit-overflow-scrolling: touch;
   }
 
-  body > .flex.h-screen.overflow-hidden > aside nav::-webkit-scrollbar {
+  body .flex.h-screen.overflow-hidden > aside nav::-webkit-scrollbar {
     display: none;
   }
 
-  body > .flex.h-screen.overflow-hidden > aside nav > a {
+  body .flex.h-screen.overflow-hidden > aside nav > a {
     flex: 0 0 auto;
     display: inline-flex;
   }
 
-  body > .flex.h-screen.overflow-hidden > aside nav > a > div {
+  body .flex.h-screen.overflow-hidden > aside nav > a > div {
     padding: 0.5rem 0.625rem;
     gap: 0.375rem;
     border-radius: 0.5rem;
   }
 
-  body > .flex.h-screen.overflow-hidden > aside nav > a > div svg {
+  body .flex.h-screen.overflow-hidden > aside nav > a > div svg {
     width: 1rem;
     height: 1rem;
   }
 
-  body > .flex.h-screen.overflow-hidden > aside nav > a > div span {
+  body .flex.h-screen.overflow-hidden > aside nav > a > div span {
     font-size: 0.8125rem;
     line-height: 1.2;
   }
 
-  body > .flex.h-screen.overflow-hidden > aside > .p-2.border-t {
+  body .flex.h-screen.overflow-hidden > aside > .p-2.border-t {
     padding: 0.375rem 0.5rem;
     border-top: 0;
   }
 
-  body > .flex.h-screen.overflow-hidden > aside > .p-2.border-t button {
+  body .flex.h-screen.overflow-hidden > aside > .p-2.border-t button {
     height: 2rem;
     padding: 0.25rem 0.5rem;
     justify-content: center;
   }
 
-  body > .flex.h-screen.overflow-hidden > aside > .p-2.border-t button span {
+  body .flex.h-screen.overflow-hidden > aside > .p-2.border-t button span {
     display: none;
   }
 
-  body > .flex.h-screen.overflow-hidden > main {
+  body .flex.h-screen.overflow-hidden > main {
     flex: 1 1 auto;
     min-height: 0;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
 
-  body > .flex.h-screen.overflow-hidden > main > .container.mx-auto.p-6.max-w-7xl {
+  body .flex.h-screen.overflow-hidden > main > .container.mx-auto.p-6.max-w-7xl {
     max-width: 100% !important;
     padding: 0.75rem !important;
   }
@@ -196,25 +244,95 @@ append_patch_block() {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 0.5rem !important;
   }
+
+  .space-y-6 > .flex.items-center.gap-3.flex-wrap {
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .space-y-6 > .flex.items-center.gap-3.flex-wrap > .relative.flex-1.max-w-sm {
+    flex: 1 1 100%;
+    max-width: 100% !important;
+  }
+
+  .rounded-lg.border.bg-card.text-card-foreground.shadow-sm > .flex.items-center.gap-4.p-4 {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 0.625rem;
+    padding: 0.75rem;
+  }
+
+  .rounded-lg.border.bg-card.text-card-foreground.shadow-sm > .flex.items-center.gap-4.p-4 > .h-10.w-10.rounded-md.bg-emerald-500\/10.flex.items-center.justify-center.shrink-0 {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .rounded-lg.border.bg-card.text-card-foreground.shadow-sm > .flex.items-center.gap-4.p-4 > .flex-1.min-w-0 {
+    flex: 1 1 calc(100% - 2.75rem);
+    min-width: 0;
+  }
+
+  .rounded-lg.border.bg-card.text-card-foreground.shadow-sm > .flex.items-center.gap-4.p-4 > .inline-flex.items-center.rounded-full.border.px-2\.5.py-0\.5.text-xs.font-semibold.transition-colors.focus\:outline-none.focus\:ring-2.focus\:ring-ring.focus\:ring-offset-2.border-transparent.bg-secondary.text-secondary-foreground.hover\:bg-secondary\/80.shrink-0 {
+    margin-left: auto;
+  }
+
+  .rounded-lg.border.bg-card.text-card-foreground.shadow-sm > .flex.items-center.gap-4.p-4 > .flex.items-center.gap-1.opacity-0.group-hover\:opacity-100.transition-opacity {
+    opacity: 1 !important;
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 0.125rem;
+  }
+
+  .rounded-lg.border.bg-card.text-card-foreground.shadow-sm .flex.items-center.gap-2.mb-1\.5 {
+    flex-wrap: wrap;
+    row-gap: 0.25rem;
+  }
+
+  .rounded-lg.border.bg-card.text-card-foreground.shadow-sm h3.font-medium.text-sm.truncate {
+    line-height: 1.3;
+    font-size: 0.9rem;
+  }
+
+  .rounded-lg.border.bg-card.text-card-foreground.shadow-sm .text-xs.text-muted-foreground {
+    line-height: 1.3;
+  }
+
+  .rounded-lg.border.bg-card.text-card-foreground.shadow-sm .max-w-\[120px\] {
+    max-width: 8.5rem !important;
+  }
+
+  .rounded-lg.border.bg-card.text-card-foreground.shadow-sm .text-\[10px\].h-4 {
+    min-height: 1.1rem;
+    line-height: 1.05;
+  }
 }
 
-@media (max-width: 480px) {
-  body > .flex.h-screen.overflow-hidden > aside > .flex.items-center.h-14.px-4.border-b h1 {
+@media (max-width: 480px), (hover: none) and (pointer: coarse) and (max-width: 720px) {
+  body .flex.h-screen.overflow-hidden > aside > .flex.items-center.h-14.px-4.border-b h1 {
     max-width: 62vw;
     font-size: 0.95rem;
   }
 
-  body > .flex.h-screen.overflow-hidden > aside nav > a > div {
+  body .flex.h-screen.overflow-hidden > aside nav > a > div {
     padding: 0.44rem 0.56rem;
   }
 
-  body > .flex.h-screen.overflow-hidden > main > .container.mx-auto.p-6.max-w-7xl {
+  body .flex.h-screen.overflow-hidden > main > .container.mx-auto.p-6.max-w-7xl {
     padding: 0.5rem !important;
   }
 
   h2.text-3xl.font-bold.tracking-tight {
     font-size: 1.35rem;
     line-height: 1.25;
+  }
+
+  .rounded-lg.border.bg-card.text-card-foreground.shadow-sm > .flex.items-center.gap-4.p-4 {
+    padding: 0.625rem;
+    gap: 0.5rem;
+  }
+
+  .rounded-lg.border.bg-card.text-card-foreground.shadow-sm .max-w-\[120px\] {
+    max-width: 7.25rem !important;
   }
 }
 /* ST_MOBILE_UI_END */
@@ -243,12 +361,14 @@ main() {
 
   if cmp -s "$css_file" "$tmp_file"; then
     rm -f "$tmp_file"
+    sync_html_css_cache_bust "$css_file" "$ACTION"
     log_info "no change needed"
     exit 0
   fi
 
   chmod --reference="$css_file" "$tmp_file" 2>/dev/null || true
   mv "$tmp_file" "$css_file"
+  sync_html_css_cache_bust "$css_file" "$ACTION"
 
   if [ "$ACTION" = "apply" ]; then
     log_info "mobile ui patch applied"
