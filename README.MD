@@ -144,6 +144,7 @@ touch "$P/.rwtest" && rm "$P/.rwtest"
 3. 查看日志：`logs/app-YYYY-MM-DD.log`
 
 说明：健康检查会优先检查 `/api/stats`，若该接口短暂返回 500，会自动回退检查 `/api/config`。
+若安装阶段仍失败，脚本会自动输出 `app-config.json`、`status`、最近日志和 `/api/config` 响应，直接把整段输出贴出来即可继续定位。
 
 ### 4) 锁屏后进程被系统回收
 

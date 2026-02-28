@@ -134,7 +134,24 @@ chmod +x termux/runit/st-manager/run termux/runit/st-manager/log/run
 
 echo "[5/6] Start service and run healthcheck"
 ST_MANAGER_HOST="$HOST" PORT="$PORT" NODE_ENV=production DATA_ROOT="$DATA_PATH" bash scripts/start.sh
-ST_MANAGER_HOST="$HOST" PORT="$PORT" RETRY_COUNT=12 RETRY_DELAY=2 bash scripts/healthcheck.sh
+if ! ST_MANAGER_HOST="$HOST" PORT="$PORT" RETRY_COUNT=12 RETRY_DELAY=2 bash scripts/healthcheck.sh; then
+  echo
+  echo "Healthcheck failed. Dumping quick diagnostics..."
+  echo "--- app-config.json ---"
+  cat "$APP_DIR/app-config.json" || true
+  echo "--- status ---"
+  PORT="$PORT" bash "$APP_DIR/scripts/status.sh" || true
+  latest_log="$(ls -1t "$APP_DIR"/logs/app-*.log 2>/dev/null | head -n 1 || true)"
+  if [ -n "${latest_log:-}" ]; then
+    echo "--- tail: $latest_log ---"
+    tail -n 120 "$latest_log" || true
+  fi
+  echo "--- curl /api/config ---"
+  curl -i -sS --max-time 10 "http://127.0.0.1:${PORT}/api/config" || true
+  echo
+  echo "Installer aborting due to unhealthy server."
+  exit 1
+fi
 
 echo "[6/6] Enable runit supervision (optional but recommended)"
 if command -v sv-enable >/dev/null 2>&1; then
