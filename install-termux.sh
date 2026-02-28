@@ -1,31 +1,46 @@
 #!/data/data/com.termux/files/usr/bin/bash
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-APP_NAME="$(basename "$SCRIPT_DIR")"
-DEFAULT_APP_DIR="$HOME/apps/$APP_NAME"
+REPO_URL="${REPO_URL:-https://github.com/qishiwan16-hub/st-manager-termux-mobile.git}"
+BRANCH="${BRANCH:-main}"
+APP_DIR="${APP_DIR:-$HOME/apps/st-manager-termux-mobile}"
+INSTALL_STAGE="${INSTALL_STAGE:-bootstrap}"
 HOST="${HOSTNAME:-127.0.0.1}"
 PORT="${PORT:-3456}"
 DATA_PATH_INPUT="${DATA_PATH:-}"
 DATA_PATH=""
 
-copy_to_termux_home() {
-  local src="$1"
-  local dst="$2"
-  local tmp="${dst}.tmp.$$"
+sync_repo_from_github() {
+  local backup_dir
+  mkdir -p "$(dirname "$APP_DIR")"
 
-  mkdir -p "$(dirname "$dst")"
-  rm -rf "$tmp"
-  mkdir -p "$tmp"
+  if [ -d "$APP_DIR/.git" ]; then
+    echo "Updating repo in $APP_DIR"
+    git -C "$APP_DIR" remote set-url origin "$REPO_URL" || true
+    git -C "$APP_DIR" fetch --depth 1 origin "$BRANCH"
+    if git -C "$APP_DIR" show-ref --verify --quiet "refs/heads/$BRANCH"; then
+      git -C "$APP_DIR" checkout "$BRANCH"
+    else
+      git -C "$APP_DIR" checkout -b "$BRANCH" "origin/$BRANCH"
+    fi
 
-  if command -v rsync >/dev/null 2>&1; then
-    rsync -a --delete --exclude 'node_modules' --exclude 'logs' --exclude '.git' "$src"/ "$tmp"/
-  else
-    tar -C "$src" --exclude='./node_modules' --exclude='./logs' --exclude='./.git' -cf - . | tar -C "$tmp" -xf -
+    if ! git -C "$APP_DIR" pull --ff-only origin "$BRANCH"; then
+      backup_dir="${APP_DIR}.bak.$(date +%s)"
+      mv "$APP_DIR" "$backup_dir"
+      echo "Local repo update failed, backup moved to: $backup_dir"
+      git clone --depth 1 --branch "$BRANCH" "$REPO_URL" "$APP_DIR"
+    fi
+    return 0
   fi
 
-  rm -rf "$dst"
-  mv "$tmp" "$dst"
+  if [ -d "$APP_DIR" ]; then
+    backup_dir="${APP_DIR}.bak.$(date +%s)"
+    mv "$APP_DIR" "$backup_dir"
+    echo "Existing non-git directory moved to: $backup_dir"
+  fi
+
+  echo "Cloning repo from GitHub to $APP_DIR"
+  git clone --depth 1 --branch "$BRANCH" "$REPO_URL" "$APP_DIR"
 }
 
 try_prepare_data_path() {
@@ -72,26 +87,32 @@ resolve_data_path() {
   exit 1
 }
 
-if [[ "$SCRIPT_DIR" == /storage/* ]]; then
-  echo "[0/8] Shared storage detected, relocating project to $DEFAULT_APP_DIR"
-  copy_to_termux_home "$SCRIPT_DIR" "$DEFAULT_APP_DIR"
-  echo "Relocation complete. Re-running installer from Termux private directory."
-  exec bash "$DEFAULT_APP_DIR/install-termux.sh"
+if [ "$INSTALL_STAGE" = "bootstrap" ]; then
+  echo "[1/3] Install Termux base packages"
+  pkg update -y
+  pkg upgrade -y
+  pkg install -y nodejs-lts git curl jq tmux termux-api termux-services lsof cronie
+
+  echo "[2/3] Pull latest code from GitHub"
+  sync_repo_from_github
+
+  echo "[3/3] Switch to deploy stage"
+  exec env INSTALL_STAGE=deploy \
+    REPO_URL="$REPO_URL" \
+    BRANCH="$BRANCH" \
+    APP_DIR="$APP_DIR" \
+    HOSTNAME="$HOST" \
+    PORT="$PORT" \
+    DATA_PATH="$DATA_PATH_INPUT" \
+    bash "$APP_DIR/install-termux.sh"
 fi
 
-APP_DIR="$SCRIPT_DIR"
-
-echo "[1/8] Install Termux base packages"
-pkg update -y
-pkg upgrade -y
-pkg install -y nodejs-lts git curl jq tmux termux-api termux-services lsof cronie rsync
-
-echo "[2/8] Setup Android shared storage permission"
+echo "[1/6] Setup Android shared storage permission"
 if command -v termux-setup-storage >/dev/null 2>&1; then
   termux-setup-storage || true
 fi
 
-echo "[3/8] Resolve writable data path"
+echo "[2/6] Resolve writable data path"
 resolve_data_path
 echo "Using DATA_PATH=$DATA_PATH"
 
@@ -101,30 +122,28 @@ cat >"$APP_DIR/app-config.json" <<EOF
 }
 EOF
 
-echo "[4/8] Install Node dependencies for mobile runtime"
+echo "[3/6] Install Node dependencies for mobile runtime"
 cd "$APP_DIR"
 rm -rf node_modules
 npm install --omit=dev
 
-echo "[5/8] Apply executable permissions"
+echo "[4/6] Apply executable permissions"
 chmod +x install-termux.sh
 chmod +x scripts/*.sh
 chmod +x termux/runit/st-manager/run termux/runit/st-manager/log/run
 
-echo "[6/8] Start service and run healthcheck"
+echo "[5/6] Start service and run healthcheck"
 HOSTNAME="$HOST" PORT="$PORT" NODE_ENV=production DATA_ROOT="$DATA_PATH" bash scripts/start.sh
 sleep 2
 HOSTNAME="$HOST" PORT="$PORT" bash scripts/healthcheck.sh
 
-echo "[7/8] Enable runit supervision (optional but recommended)"
+echo "[6/6] Enable runit supervision (optional but recommended)"
 if command -v sv-enable >/dev/null 2>&1; then
   sv-enable || true
 fi
 if command -v sv >/dev/null 2>&1; then
   bash scripts/install-runit-service.sh || true
 fi
-
-echo "[8/8] Done"
 
 echo
 echo "Install complete."
