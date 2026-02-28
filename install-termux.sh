@@ -321,11 +321,20 @@ install_node_dependencies() {
 
 ensure_webpack_runtime() {
   local runtime_file="$APP_DIR/.next/server/webpack-runtime.js"
-  if [ -f "$runtime_file" ]; then
+  local rebuild_runtime=0
+
+  if [ ! -f "$runtime_file" ]; then
+    echo "WARN: missing $runtime_file, creating fallback runtime"
+    rebuild_runtime=1
+  elif ! grep -q "__webpack_require__\\.t" "$runtime_file"; then
+    echo "WARN: detected incompatible webpack runtime, rebuilding fallback runtime"
+    rebuild_runtime=1
+  fi
+
+  if [ "$rebuild_runtime" -eq 0 ]; then
     return 0
   fi
 
-  echo "WARN: missing $runtime_file, creating fallback runtime"
   mkdir -p "$APP_DIR/.next/server"
   cat >"$runtime_file" <<'RUNTIME_EOF'
 "use strict";
@@ -366,6 +375,32 @@ __webpack_require__.n = (module) => {
   const getter = module && module.__esModule ? () => module.default : () => module;
   __webpack_require__.d(getter, { a: getter });
   return getter;
+};
+__webpack_require__.t = (value, mode) => {
+  if (mode & 1) {
+    value = __webpack_require__(value);
+  }
+  if (mode & 8) {
+    return value;
+  }
+  if (typeof value === "object" && value) {
+    if ((mode & 4) && value.__esModule) {
+      return value;
+    }
+    if ((mode & 16) && typeof value.then === "function") {
+      return value;
+    }
+  }
+  const namespace = Object.create(null);
+  __webpack_require__.r(namespace);
+  const definition = { default: () => value };
+  if (value && (typeof value === "object" || typeof value === "function")) {
+    for (const key in value) {
+      definition[key] = () => value[key];
+    }
+  }
+  __webpack_require__.d(namespace, definition);
+  return namespace;
 };
 function registerChunk(chunk) {
   if (!chunk || typeof chunk !== "object") return;

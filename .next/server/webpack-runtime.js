@@ -51,6 +51,33 @@ __webpack_require__.n = (module) => {
   return getter;
 };
 
+__webpack_require__.t = (value, mode) => {
+  if (mode & 1) {
+    value = __webpack_require__(value);
+  }
+  if (mode & 8) {
+    return value;
+  }
+  if (typeof value === "object" && value) {
+    if ((mode & 4) && value.__esModule) {
+      return value;
+    }
+    if ((mode & 16) && typeof value.then === "function") {
+      return value;
+    }
+  }
+  const namespace = Object.create(null);
+  __webpack_require__.r(namespace);
+  const definition = { default: () => value };
+  if (value && (typeof value === "object" || typeof value === "function")) {
+    for (const key in value) {
+      definition[key] = () => value[key];
+    }
+  }
+  __webpack_require__.d(namespace, definition);
+  return namespace;
+};
+
 function registerChunk(chunk) {
   if (!chunk || typeof chunk !== "object") {
     return;
