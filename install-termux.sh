@@ -5,7 +5,8 @@ REPO_URL="${REPO_URL:-https://github.com/qishiwan16-hub/st-manager-termux-mobile
 BRANCH="${BRANCH:-main}"
 APP_DIR="${APP_DIR:-$HOME/apps/st-manager-termux-mobile}"
 INSTALL_STAGE="${INSTALL_STAGE:-bootstrap}"
-HOST="${ST_MANAGER_HOST:-127.0.0.1}"
+ST_MANAGER_HOST_INPUT="${ST_MANAGER_HOST:-}"
+HOST="${ST_MANAGER_HOST_INPUT:-127.0.0.1}"
 PORT="${PORT:-3456}"
 DATA_PATH_INPUT="${DATA_PATH:-}"
 DATA_PATH=""
@@ -353,14 +354,56 @@ resolve_data_path() {
   exit 1
 }
 
+prompt_access_mode() {
+  if [ -n "$ST_MANAGER_HOST_INPUT" ]; then
+    HOST="$ST_MANAGER_HOST_INPUT"
+    return 0
+  fi
+
+  if [ ! -t 0 ]; then
+    HOST="127.0.0.1"
+    echo "No interactive terminal detected, defaulting to local access (127.0.0.1)."
+    return 0
+  fi
+
+  echo "请选择访问模式:"
+  echo "  1) 本地访问 (127.0.0.1)"
+  echo "  2) 公网访问 (0.0.0.0)"
+
+  while true; do
+    printf "请输入选项 [1/2] (默认 1): "
+    local access_choice=""
+    IFS= read -r access_choice || access_choice=""
+    case "${access_choice:-1}" in
+      1)
+        HOST="127.0.0.1"
+        break
+        ;;
+      2)
+        HOST="0.0.0.0"
+        echo "WARN: 已启用公网监听，请确保已配置防火墙和鉴权。"
+        break
+        ;;
+      *)
+        echo "无效选项，请输入 1 或 2。"
+        ;;
+    esac
+  done
+
+  echo "Selected host: $HOST"
+}
+
 if [ "$INSTALL_STAGE" = "bootstrap" ]; then
-  echo "[1/3] Install base packages (compat mode)"
+  echo "[1/4] Install base packages (compat mode)"
   install_base_packages
 
-  echo "[2/3] Pull latest code from GitHub"
+  echo "[2/4] Pull latest code from GitHub"
   sync_repo_from_github
 
-  echo "[3/3] Switch to deploy stage"
+  echo "[3/4] Configure access mode"
+  prompt_access_mode
+
+  echo "[4/4] Switch to deploy stage"
   exec env INSTALL_STAGE=deploy \
     REPO_URL="$REPO_URL" \
     BRANCH="$BRANCH" \
@@ -370,6 +413,8 @@ if [ "$INSTALL_STAGE" = "bootstrap" ]; then
     DATA_PATH="$DATA_PATH_INPUT" \
     bash "$APP_DIR/install-termux.sh"
 fi
+
+prompt_access_mode
 
 echo "[1/6] Prepare storage access (lazy mode)"
 echo "Shared storage permission will only be requested if /storage path is used."
