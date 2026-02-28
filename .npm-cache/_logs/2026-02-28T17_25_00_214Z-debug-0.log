@@ -1,0 +1,1081 @@
+0 verbose cli /usr/bin/node /usr/bin/npm
+1 info using npm@9.2.0
+2 info using node@v18.20.4
+3 timing npm:load:whichnode Completed in 0ms
+4 timing config:load:defaults Completed in 2ms
+5 timing config:load:file:/usr/share/nodejs/npm/npmrc Completed in 3ms
+6 timing config:load:builtin Completed in 3ms
+7 timing config:load:cli Completed in 2ms
+8 timing config:load:env Completed in 1ms
+9 timing config:load:file:/root/st-manager-termux-mobile/.npmrc Completed in 0ms
+10 timing config:load:project Completed in 1ms
+11 timing config:load:file:/root/.npmrc Completed in 0ms
+12 timing config:load:user Completed in 0ms
+13 timing config:load:file:/etc/npmrc Completed in 0ms
+14 timing config:load:global Completed in 0ms
+15 timing config:load:setEnvs Completed in 1ms
+16 timing config:load Completed in 12ms
+17 timing npm:load:configload Completed in 12ms
+18 timing npm:load:mkdirpcache Completed in 0ms
+19 timing npm:load:mkdirplogs Completed in 0ms
+20 verbose title npm ci
+21 verbose argv "ci" "--omit" "dev" "--no-audit" "--fund" "false" "--prefer-offline" "--progress" "false"
+22 timing npm:load:setTitle Completed in 1ms
+23 timing config:load:flatten Completed in 3ms
+24 timing npm:load:display Completed in 5ms
+25 verbose logfile logs-max:10 dir:/root/st-manager-termux-mobile/.npm-cache/_logs/2026-02-28T17_25_00_214Z-
+26 verbose logfile /root/st-manager-termux-mobile/.npm-cache/_logs/2026-02-28T17_25_00_214Z-debug-0.log
+27 timing npm:load:logFile Completed in 9ms
+28 timing npm:load:timers Completed in 0ms
+29 timing npm:load:configScope Completed in 0ms
+30 timing npm:load Completed in 29ms
+31 silly logfile done cleaning log files
+32 timing config:load:flatten Completed in 0ms
+33 timing arborist:ctor Completed in 1ms
+34 timing idealTree:init Completed in 2ms
+35 timing idealTree:userRequests Completed in 1ms
+36 silly idealTree buildDeps
+37 timing idealTree:#root Completed in 1ms
+38 timing idealTree:buildDeps Completed in 1ms
+39 timing idealTree:fixDepFlags Completed in 0ms
+40 warn EBADENGINE Unsupported engine {
+40 warn EBADENGINE   package: 'eslint-visitor-keys@5.0.1',
+40 warn EBADENGINE   required: { node: '^20.19.0 || ^22.13.0 || >=24' },
+40 warn EBADENGINE   current: { node: 'v18.20.4', npm: '9.2.0' }
+40 warn EBADENGINE }
+41 timing idealTree Completed in 32ms
+42 timing npm-ci:rm Completed in 69ms
+43 timing reify:loadTrees Completed in 7ms
+44 timing reify:diffTrees Completed in 8ms
+45 silly reify moves {}
+46 timing reify:retireShallow Completed in 0ms
+47 timing reify:createSparse Completed in 128ms
+48 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@emnapi/core' ]
+49 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@emnapi/wasi-threads' ]
+50 silly reify mark deleted [
+50 silly reify   '/root/st-manager-termux-mobile/node_modules/@eslint-community/eslint-utils'
+50 silly reify ]
+51 silly reify mark deleted [
+51 silly reify   '/root/st-manager-termux-mobile/node_modules/@eslint-community/eslint-utils/node_modules/eslint-visitor-keys'
+51 silly reify ]
+52 silly reify mark deleted [
+52 silly reify   '/root/st-manager-termux-mobile/node_modules/@eslint-community/regexpp'
+52 silly reify ]
+53 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@eslint/config-array' ]
+54 silly reify mark deleted [
+54 silly reify   '/root/st-manager-termux-mobile/node_modules/@eslint/config-helpers'
+54 silly reify ]
+55 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@eslint/core' ]
+56 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@eslint/eslintrc' ]
+57 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@eslint/js' ]
+58 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@eslint/object-schema' ]
+59 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@eslint/plugin-kit' ]
+60 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@humanfs/core' ]
+61 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@humanfs/node' ]
+62 silly reify mark deleted [
+62 silly reify   '/root/st-manager-termux-mobile/node_modules/@humanwhocodes/module-importer'
+62 silly reify ]
+63 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@humanwhocodes/retry' ]
+64 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@napi-rs/wasm-runtime' ]
+65 silly reify mark deleted [
+65 silly reify   '/root/st-manager-termux-mobile/node_modules/@next/eslint-plugin-next'
+65 silly reify ]
+66 silly reify mark deleted [
+66 silly reify   '/root/st-manager-termux-mobile/node_modules/@nolyfill/is-core-module'
+66 silly reify ]
+67 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@rtsao/scc' ]
+68 silly reify mark deleted [
+68 silly reify   '/root/st-manager-termux-mobile/node_modules/@rushstack/eslint-patch'
+68 silly reify ]
+69 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@tybys/wasm-util' ]
+70 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@types/estree' ]
+71 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@types/json-schema' ]
+72 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@types/json5' ]
+73 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@types/node' ]
+74 silly reify mark deleted [
+74 silly reify   '/root/st-manager-termux-mobile/node_modules/@typescript-eslint/eslint-plugin'
+74 silly reify ]
+75 silly reify mark deleted [
+75 silly reify   '/root/st-manager-termux-mobile/node_modules/@typescript-eslint/eslint-plugin/node_modules/ignore'
+75 silly reify ]
+76 silly reify mark deleted [
+76 silly reify   '/root/st-manager-termux-mobile/node_modules/@typescript-eslint/parser'
+76 silly reify ]
+77 silly reify mark deleted [
+77 silly reify   '/root/st-manager-termux-mobile/node_modules/@typescript-eslint/project-service'
+77 silly reify ]
+78 silly reify mark deleted [
+78 silly reify   '/root/st-manager-termux-mobile/node_modules/@typescript-eslint/scope-manager'
+78 silly reify ]
+79 silly reify mark deleted [
+79 silly reify   '/root/st-manager-termux-mobile/node_modules/@typescript-eslint/tsconfig-utils'
+79 silly reify ]
+80 silly reify mark deleted [
+80 silly reify   '/root/st-manager-termux-mobile/node_modules/@typescript-eslint/type-utils'
+80 silly reify ]
+81 silly reify mark deleted [
+81 silly reify   '/root/st-manager-termux-mobile/node_modules/@typescript-eslint/types'
+81 silly reify ]
+82 silly reify mark deleted [
+82 silly reify   '/root/st-manager-termux-mobile/node_modules/@typescript-eslint/typescript-estree'
+82 silly reify ]
+83 silly reify mark deleted [
+83 silly reify   '/root/st-manager-termux-mobile/node_modules/@typescript-eslint/typescript-estree/node_modules/balanced-match'
+83 silly reify ]
+84 silly reify mark deleted [
+84 silly reify   '/root/st-manager-termux-mobile/node_modules/@typescript-eslint/typescript-estree/node_modules/brace-expansion'
+84 silly reify ]
+85 silly reify mark deleted [
+85 silly reify   '/root/st-manager-termux-mobile/node_modules/@typescript-eslint/typescript-estree/node_modules/minimatch'
+85 silly reify ]
+86 silly reify mark deleted [
+86 silly reify   '/root/st-manager-termux-mobile/node_modules/@typescript-eslint/utils'
+86 silly reify ]
+87 silly reify mark deleted [
+87 silly reify   '/root/st-manager-termux-mobile/node_modules/@typescript-eslint/visitor-keys'
+87 silly reify ]
+88 silly reify mark deleted [
+88 silly reify   '/root/st-manager-termux-mobile/node_modules/@typescript-eslint/visitor-keys/node_modules/eslint-visitor-keys'
+88 silly reify ]
+89 silly reify mark deleted [
+89 silly reify   '/root/st-manager-termux-mobile/node_modules/@unrs/resolver-binding-android-arm-eabi'
+89 silly reify ]
+90 silly reify mark deleted [
+90 silly reify   '/root/st-manager-termux-mobile/node_modules/@unrs/resolver-binding-android-arm64'
+90 silly reify ]
+91 silly reify mark deleted [
+91 silly reify   '/root/st-manager-termux-mobile/node_modules/@unrs/resolver-binding-darwin-arm64'
+91 silly reify ]
+92 silly reify mark deleted [
+92 silly reify   '/root/st-manager-termux-mobile/node_modules/@unrs/resolver-binding-darwin-x64'
+92 silly reify ]
+93 silly reify mark deleted [
+93 silly reify   '/root/st-manager-termux-mobile/node_modules/@unrs/resolver-binding-freebsd-x64'
+93 silly reify ]
+94 silly reify mark deleted [
+94 silly reify   '/root/st-manager-termux-mobile/node_modules/@unrs/resolver-binding-linux-arm-gnueabihf'
+94 silly reify ]
+95 silly reify mark deleted [
+95 silly reify   '/root/st-manager-termux-mobile/node_modules/@unrs/resolver-binding-linux-arm-musleabihf'
+95 silly reify ]
+96 silly reify mark deleted [
+96 silly reify   '/root/st-manager-termux-mobile/node_modules/@unrs/resolver-binding-linux-arm64-gnu'
+96 silly reify ]
+97 silly reify mark deleted [
+97 silly reify   '/root/st-manager-termux-mobile/node_modules/@unrs/resolver-binding-linux-arm64-musl'
+97 silly reify ]
+98 silly reify mark deleted [
+98 silly reify   '/root/st-manager-termux-mobile/node_modules/@unrs/resolver-binding-linux-ppc64-gnu'
+98 silly reify ]
+99 silly reify mark deleted [
+99 silly reify   '/root/st-manager-termux-mobile/node_modules/@unrs/resolver-binding-linux-riscv64-gnu'
+99 silly reify ]
+100 silly reify mark deleted [
+100 silly reify   '/root/st-manager-termux-mobile/node_modules/@unrs/resolver-binding-linux-riscv64-musl'
+100 silly reify ]
+101 silly reify mark deleted [
+101 silly reify   '/root/st-manager-termux-mobile/node_modules/@unrs/resolver-binding-linux-s390x-gnu'
+101 silly reify ]
+102 silly reify mark deleted [
+102 silly reify   '/root/st-manager-termux-mobile/node_modules/@unrs/resolver-binding-linux-x64-gnu'
+102 silly reify ]
+103 silly reify mark deleted [
+103 silly reify   '/root/st-manager-termux-mobile/node_modules/@unrs/resolver-binding-linux-x64-musl'
+103 silly reify ]
+104 silly reify mark deleted [
+104 silly reify   '/root/st-manager-termux-mobile/node_modules/@unrs/resolver-binding-wasm32-wasi'
+104 silly reify ]
+105 silly reify mark deleted [
+105 silly reify   '/root/st-manager-termux-mobile/node_modules/@unrs/resolver-binding-win32-arm64-msvc'
+105 silly reify ]
+106 silly reify mark deleted [
+106 silly reify   '/root/st-manager-termux-mobile/node_modules/@unrs/resolver-binding-win32-ia32-msvc'
+106 silly reify ]
+107 silly reify mark deleted [
+107 silly reify   '/root/st-manager-termux-mobile/node_modules/@unrs/resolver-binding-win32-x64-msvc'
+107 silly reify ]
+108 silly reify mark deleted [
+108 silly reify   '/root/st-manager-termux-mobile/node_modules/acorn',
+108 silly reify   '/root/st-manager-termux-mobile/node_modules/.bin/acorn'
+108 silly reify ]
+109 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/acorn-jsx' ]
+110 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/ajv' ]
+111 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/ansi-styles' ]
+112 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/argparse' ]
+113 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/aria-query' ]
+114 silly reify mark deleted [
+114 silly reify   '/root/st-manager-termux-mobile/node_modules/array-buffer-byte-length'
+114 silly reify ]
+115 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/array-includes' ]
+116 silly reify mark deleted [
+116 silly reify   '/root/st-manager-termux-mobile/node_modules/array.prototype.findlast'
+116 silly reify ]
+117 silly reify mark deleted [
+117 silly reify   '/root/st-manager-termux-mobile/node_modules/array.prototype.findlastindex'
+117 silly reify ]
+118 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/array.prototype.flat' ]
+119 silly reify mark deleted [
+119 silly reify   '/root/st-manager-termux-mobile/node_modules/array.prototype.flatmap'
+119 silly reify ]
+120 silly reify mark deleted [
+120 silly reify   '/root/st-manager-termux-mobile/node_modules/array.prototype.tosorted'
+120 silly reify ]
+121 silly reify mark deleted [
+121 silly reify   '/root/st-manager-termux-mobile/node_modules/arraybuffer.prototype.slice'
+121 silly reify ]
+122 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/ast-types-flow' ]
+123 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/async-function' ]
+124 silly reify mark deleted [
+124 silly reify   '/root/st-manager-termux-mobile/node_modules/autoprefixer',
+124 silly reify   '/root/st-manager-termux-mobile/node_modules/.bin/autoprefixer'
+124 silly reify ]
+125 silly reify mark deleted [
+125 silly reify   '/root/st-manager-termux-mobile/node_modules/available-typed-arrays'
+125 silly reify ]
+126 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/axe-core' ]
+127 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/axobject-query' ]
+128 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/balanced-match' ]
+129 silly reify mark deleted [
+129 silly reify   '/root/st-manager-termux-mobile/node_modules/baseline-browser-mapping',
+129 silly reify   '/root/st-manager-termux-mobile/node_modules/.bin/baseline-browser-mapping'
+129 silly reify ]
+130 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/brace-expansion' ]
+131 silly reify mark deleted [
+131 silly reify   '/root/st-manager-termux-mobile/node_modules/browserslist',
+131 silly reify   '/root/st-manager-termux-mobile/node_modules/.bin/browserslist'
+131 silly reify ]
+132 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/call-bind' ]
+133 silly reify mark deleted [
+133 silly reify   '/root/st-manager-termux-mobile/node_modules/call-bind-apply-helpers'
+133 silly reify ]
+134 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/call-bound' ]
+135 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/callsites' ]
+136 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/chalk' ]
+137 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/color-convert' ]
+138 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/color-name' ]
+139 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/concat-map' ]
+140 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/cross-spawn' ]
+141 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/damerau-levenshtein' ]
+142 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/data-view-buffer' ]
+143 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/data-view-byte-length' ]
+144 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/data-view-byte-offset' ]
+145 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/debug' ]
+146 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/deep-is' ]
+147 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/define-data-property' ]
+148 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/define-properties' ]
+149 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/doctrine' ]
+150 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/dunder-proto' ]
+151 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/electron-to-chromium' ]
+152 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/emoji-regex' ]
+153 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/es-abstract' ]
+154 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/es-define-property' ]
+155 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/es-errors' ]
+156 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/es-iterator-helpers' ]
+157 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/es-object-atoms' ]
+158 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/es-set-tostringtag' ]
+159 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/es-shim-unscopables' ]
+160 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/es-to-primitive' ]
+161 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/escalade' ]
+162 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/escape-string-regexp' ]
+163 silly reify mark deleted [
+163 silly reify   '/root/st-manager-termux-mobile/node_modules/eslint',
+163 silly reify   '/root/st-manager-termux-mobile/node_modules/.bin/eslint'
+163 silly reify ]
+164 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/eslint-config-next' ]
+165 silly reify mark deleted [
+165 silly reify   '/root/st-manager-termux-mobile/node_modules/eslint-import-resolver-node'
+165 silly reify ]
+166 silly reify mark deleted [
+166 silly reify   '/root/st-manager-termux-mobile/node_modules/eslint-import-resolver-node/node_modules/debug'
+166 silly reify ]
+167 silly reify mark deleted [
+167 silly reify   '/root/st-manager-termux-mobile/node_modules/eslint-import-resolver-typescript'
+167 silly reify ]
+168 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/eslint-module-utils' ]
+169 silly reify mark deleted [
+169 silly reify   '/root/st-manager-termux-mobile/node_modules/eslint-module-utils/node_modules/debug'
+169 silly reify ]
+170 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/eslint-plugin-import' ]
+171 silly reify mark deleted [
+171 silly reify   '/root/st-manager-termux-mobile/node_modules/eslint-plugin-import/node_modules/debug'
+171 silly reify ]
+172 silly reify mark deleted [
+172 silly reify   '/root/st-manager-termux-mobile/node_modules/eslint-plugin-import/node_modules/semver',
+172 silly reify   '/root/st-manager-termux-mobile/node_modules/eslint-plugin-import/node_modules/.bin/semver'
+172 silly reify ]
+173 silly reify mark deleted [
+173 silly reify   '/root/st-manager-termux-mobile/node_modules/eslint-plugin-jsx-a11y'
+173 silly reify ]
+174 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/eslint-plugin-react' ]
+175 silly reify mark deleted [
+175 silly reify   '/root/st-manager-termux-mobile/node_modules/eslint-plugin-react-hooks'
+175 silly reify ]
+176 silly reify mark deleted [
+176 silly reify   '/root/st-manager-termux-mobile/node_modules/eslint-plugin-react/node_modules/resolve',
+176 silly reify   '/root/st-manager-termux-mobile/node_modules/eslint-plugin-react/node_modules/.bin/resolve'
+176 silly reify ]
+177 silly reify mark deleted [
+177 silly reify   '/root/st-manager-termux-mobile/node_modules/eslint-plugin-react/node_modules/semver',
+177 silly reify   '/root/st-manager-termux-mobile/node_modules/eslint-plugin-react/node_modules/.bin/semver'
+177 silly reify ]
+178 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/eslint-scope' ]
+179 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/eslint-visitor-keys' ]
+180 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/espree' ]
+181 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/esquery' ]
+182 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/esrecurse' ]
+183 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/estraverse' ]
+184 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/esutils' ]
+185 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/fast-deep-equal' ]
+186 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/fast-glob' ]
+187 silly reify mark deleted [
+187 silly reify   '/root/st-manager-termux-mobile/node_modules/fast-glob/node_modules/glob-parent'
+187 silly reify ]
+188 silly reify mark deleted [
+188 silly reify   '/root/st-manager-termux-mobile/node_modules/fast-json-stable-stringify'
+188 silly reify ]
+189 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/fast-levenshtein' ]
+190 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/file-entry-cache' ]
+191 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/find-up' ]
+192 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/flat-cache' ]
+193 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/flatted' ]
+194 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/for-each' ]
+195 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/fraction.js' ]
+196 silly reify mark deleted [
+196 silly reify   '/root/st-manager-termux-mobile/node_modules/function.prototype.name'
+196 silly reify ]
+197 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/functions-have-names' ]
+198 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/generator-function' ]
+199 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/get-intrinsic' ]
+200 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/get-proto' ]
+201 silly reify mark deleted [
+201 silly reify   '/root/st-manager-termux-mobile/node_modules/get-symbol-description'
+201 silly reify ]
+202 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/get-tsconfig' ]
+203 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/globals' ]
+204 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/globalthis' ]
+205 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/gopd' ]
+206 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/has-bigints' ]
+207 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/has-flag' ]
+208 silly reify mark deleted [
+208 silly reify   '/root/st-manager-termux-mobile/node_modules/has-property-descriptors'
+208 silly reify ]
+209 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/has-proto' ]
+210 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/has-symbols' ]
+211 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/has-tostringtag' ]
+212 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/ignore' ]
+213 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/import-fresh' ]
+214 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/imurmurhash' ]
+215 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/internal-slot' ]
+216 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/is-array-buffer' ]
+217 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/is-async-function' ]
+218 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/is-bigint' ]
+219 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/is-boolean-object' ]
+220 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/is-bun-module' ]
+221 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/is-callable' ]
+222 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/is-data-view' ]
+223 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/is-date-object' ]
+224 silly reify mark deleted [
+224 silly reify   '/root/st-manager-termux-mobile/node_modules/is-finalizationregistry'
+224 silly reify ]
+225 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/is-generator-function' ]
+226 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/is-map' ]
+227 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/is-negative-zero' ]
+228 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/is-number-object' ]
+229 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/is-regex' ]
+230 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/is-set' ]
+231 silly reify mark deleted [
+231 silly reify   '/root/st-manager-termux-mobile/node_modules/is-shared-array-buffer'
+231 silly reify ]
+232 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/is-string' ]
+233 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/is-symbol' ]
+234 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/is-typed-array' ]
+235 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/is-weakmap' ]
+236 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/is-weakref' ]
+237 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/is-weakset' ]
+238 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/isarray' ]
+239 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/isexe' ]
+240 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/iterator.prototype' ]
+241 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/js-tokens' ]
+242 silly reify mark deleted [
+242 silly reify   '/root/st-manager-termux-mobile/node_modules/js-yaml',
+242 silly reify   '/root/st-manager-termux-mobile/node_modules/.bin/js-yaml'
+242 silly reify ]
+243 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/json-buffer' ]
+244 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/json-schema-traverse' ]
+245 silly reify mark deleted [
+245 silly reify   '/root/st-manager-termux-mobile/node_modules/json-stable-stringify-without-jsonify'
+245 silly reify ]
+246 silly reify mark deleted [
+246 silly reify   '/root/st-manager-termux-mobile/node_modules/json5',
+246 silly reify   '/root/st-manager-termux-mobile/node_modules/.bin/json5'
+246 silly reify ]
+247 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/jsx-ast-utils' ]
+248 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/keyv' ]
+249 silly reify mark deleted [
+249 silly reify   '/root/st-manager-termux-mobile/node_modules/language-subtag-registry'
+249 silly reify ]
+250 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/language-tags' ]
+251 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/levn' ]
+252 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/locate-path' ]
+253 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/lodash.merge' ]
+254 silly reify mark deleted [
+254 silly reify   '/root/st-manager-termux-mobile/node_modules/loose-envify',
+254 silly reify   '/root/st-manager-termux-mobile/node_modules/.bin/loose-envify'
+254 silly reify ]
+255 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/math-intrinsics' ]
+256 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/minimatch' ]
+257 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/minimist' ]
+258 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/ms' ]
+259 silly reify mark deleted [
+259 silly reify   '/root/st-manager-termux-mobile/node_modules/napi-postinstall',
+259 silly reify   '/root/st-manager-termux-mobile/node_modules/.bin/napi-postinstall'
+259 silly reify ]
+260 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/natural-compare' ]
+261 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/node-exports-info' ]
+262 silly reify mark deleted [
+262 silly reify   '/root/st-manager-termux-mobile/node_modules/node-exports-info/node_modules/semver',
+262 silly reify   '/root/st-manager-termux-mobile/node_modules/node-exports-info/node_modules/.bin/semver'
+262 silly reify ]
+263 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/node-releases' ]
+264 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/object-inspect' ]
+265 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/object-keys' ]
+266 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/object.assign' ]
+267 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/object.entries' ]
+268 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/object.fromentries' ]
+269 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/object.groupby' ]
+270 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/object.values' ]
+271 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/optionator' ]
+272 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/own-keys' ]
+273 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/p-limit' ]
+274 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/p-locate' ]
+275 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/parent-module' ]
+276 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/path-exists' ]
+277 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/path-key' ]
+278 silly reify mark deleted [
+278 silly reify   '/root/st-manager-termux-mobile/node_modules/possible-typed-array-names'
+278 silly reify ]
+279 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/prelude-ls' ]
+280 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/prop-types' ]
+281 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/punycode' ]
+282 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/react-is' ]
+283 silly reify mark deleted [
+283 silly reify   '/root/st-manager-termux-mobile/node_modules/reflect.getprototypeof'
+283 silly reify ]
+284 silly reify mark deleted [
+284 silly reify   '/root/st-manager-termux-mobile/node_modules/regexp.prototype.flags'
+284 silly reify ]
+285 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/resolve-from' ]
+286 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/resolve-pkg-maps' ]
+287 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/safe-array-concat' ]
+288 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/safe-push-apply' ]
+289 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/safe-regex-test' ]
+290 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/set-function-length' ]
+291 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/set-function-name' ]
+292 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/set-proto' ]
+293 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/shebang-command' ]
+294 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/shebang-regex' ]
+295 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/side-channel' ]
+296 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/side-channel-list' ]
+297 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/side-channel-map' ]
+298 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/side-channel-weakmap' ]
+299 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/stable-hash' ]
+300 silly reify mark deleted [
+300 silly reify   '/root/st-manager-termux-mobile/node_modules/stop-iteration-iterator'
+300 silly reify ]
+301 silly reify mark deleted [
+301 silly reify   '/root/st-manager-termux-mobile/node_modules/string.prototype.includes'
+301 silly reify ]
+302 silly reify mark deleted [
+302 silly reify   '/root/st-manager-termux-mobile/node_modules/string.prototype.matchall'
+302 silly reify ]
+303 silly reify mark deleted [
+303 silly reify   '/root/st-manager-termux-mobile/node_modules/string.prototype.repeat'
+303 silly reify ]
+304 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/string.prototype.trim' ]
+305 silly reify mark deleted [
+305 silly reify   '/root/st-manager-termux-mobile/node_modules/string.prototype.trimend'
+305 silly reify ]
+306 silly reify mark deleted [
+306 silly reify   '/root/st-manager-termux-mobile/node_modules/string.prototype.trimstart'
+306 silly reify ]
+307 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/strip-bom' ]
+308 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/strip-json-comments' ]
+309 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/supports-color' ]
+310 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/ts-api-utils' ]
+311 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/tsconfig-paths' ]
+312 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/type-check' ]
+313 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/typed-array-buffer' ]
+314 silly reify mark deleted [
+314 silly reify   '/root/st-manager-termux-mobile/node_modules/typed-array-byte-length'
+314 silly reify ]
+315 silly reify mark deleted [
+315 silly reify   '/root/st-manager-termux-mobile/node_modules/typed-array-byte-offset'
+315 silly reify ]
+316 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/typed-array-length' ]
+317 silly reify mark deleted [
+317 silly reify   '/root/st-manager-termux-mobile/node_modules/typescript',
+317 silly reify   '/root/st-manager-termux-mobile/node_modules/.bin/tsc',
+317 silly reify   '/root/st-manager-termux-mobile/node_modules/.bin/tsserver'
+317 silly reify ]
+318 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/unbox-primitive' ]
+319 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/undici-types' ]
+320 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/unrs-resolver' ]
+321 silly reify mark deleted [
+321 silly reify   '/root/st-manager-termux-mobile/node_modules/update-browserslist-db',
+321 silly reify   '/root/st-manager-termux-mobile/node_modules/.bin/update-browserslist-db'
+321 silly reify ]
+322 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/uri-js' ]
+323 silly reify mark deleted [
+323 silly reify   '/root/st-manager-termux-mobile/node_modules/which',
+323 silly reify   '/root/st-manager-termux-mobile/node_modules/.bin/node-which'
+323 silly reify ]
+324 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/which-boxed-primitive' ]
+325 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/which-builtin-type' ]
+326 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/which-collection' ]
+327 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/which-typed-array' ]
+328 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/word-wrap' ]
+329 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/yocto-queue' ]
+330 timing reify:trashOmits Completed in 28ms
+331 timing reify:loadBundles Completed in 0ms
+332 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/fsevents
+333 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/fsevents' ]
+334 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@next/swc-win32-x64-msvc
+335 silly reify mark deleted [
+335 silly reify   '/root/st-manager-termux-mobile/node_modules/@next/swc-win32-x64-msvc'
+335 silly reify ]
+336 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@next/swc-win32-arm64-msvc
+337 silly reify mark deleted [
+337 silly reify   '/root/st-manager-termux-mobile/node_modules/@next/swc-win32-arm64-msvc'
+337 silly reify ]
+338 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@next/swc-linux-arm64-musl
+339 silly reify mark deleted [
+339 silly reify   '/root/st-manager-termux-mobile/node_modules/@next/swc-linux-arm64-musl'
+339 silly reify ]
+340 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@next/swc-linux-arm64-gnu
+341 silly reify mark deleted [
+341 silly reify   '/root/st-manager-termux-mobile/node_modules/@next/swc-linux-arm64-gnu'
+341 silly reify ]
+342 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@next/swc-darwin-x64
+343 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@next/swc-darwin-x64' ]
+344 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@next/swc-darwin-arm64
+345 silly reify mark deleted [
+345 silly reify   '/root/st-manager-termux-mobile/node_modules/@next/swc-darwin-arm64'
+345 silly reify ]
+346 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@img/sharp-win32-x64
+347 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@img/sharp-win32-x64' ]
+348 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@img/sharp-win32-ia32
+349 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@img/sharp-win32-ia32' ]
+350 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@img/sharp-win32-arm64
+351 silly reify mark deleted [
+351 silly reify   '/root/st-manager-termux-mobile/node_modules/@img/sharp-win32-arm64'
+351 silly reify ]
+352 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@img/sharp-wasm32
+353 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@img/sharp-wasm32' ]
+354 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@img/sharp-linuxmusl-arm64
+355 silly reify mark deleted [
+355 silly reify   '/root/st-manager-termux-mobile/node_modules/@img/sharp-linuxmusl-arm64'
+355 silly reify ]
+356 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@img/sharp-linux-s390x
+357 silly reify mark deleted [
+357 silly reify   '/root/st-manager-termux-mobile/node_modules/@img/sharp-linux-s390x'
+357 silly reify ]
+358 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@img/sharp-linux-riscv64
+359 silly reify mark deleted [
+359 silly reify   '/root/st-manager-termux-mobile/node_modules/@img/sharp-linux-riscv64'
+359 silly reify ]
+360 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@img/sharp-linux-ppc64
+361 silly reify mark deleted [
+361 silly reify   '/root/st-manager-termux-mobile/node_modules/@img/sharp-linux-ppc64'
+361 silly reify ]
+362 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@img/sharp-linux-arm64
+363 silly reify mark deleted [
+363 silly reify   '/root/st-manager-termux-mobile/node_modules/@img/sharp-linux-arm64'
+363 silly reify ]
+364 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@img/sharp-linux-arm
+365 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@img/sharp-linux-arm' ]
+366 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@img/sharp-libvips-linuxmusl-arm64
+367 silly reify mark deleted [
+367 silly reify   '/root/st-manager-termux-mobile/node_modules/@img/sharp-libvips-linuxmusl-arm64'
+367 silly reify ]
+368 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@img/sharp-libvips-linux-s390x
+369 silly reify mark deleted [
+369 silly reify   '/root/st-manager-termux-mobile/node_modules/@img/sharp-libvips-linux-s390x'
+369 silly reify ]
+370 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@img/sharp-libvips-linux-riscv64
+371 silly reify mark deleted [
+371 silly reify   '/root/st-manager-termux-mobile/node_modules/@img/sharp-libvips-linux-riscv64'
+371 silly reify ]
+372 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@img/sharp-libvips-linux-ppc64
+373 silly reify mark deleted [
+373 silly reify   '/root/st-manager-termux-mobile/node_modules/@img/sharp-libvips-linux-ppc64'
+373 silly reify ]
+374 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@img/sharp-libvips-linux-arm64
+375 silly reify mark deleted [
+375 silly reify   '/root/st-manager-termux-mobile/node_modules/@img/sharp-libvips-linux-arm64'
+375 silly reify ]
+376 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@img/sharp-libvips-linux-arm
+377 silly reify mark deleted [
+377 silly reify   '/root/st-manager-termux-mobile/node_modules/@img/sharp-libvips-linux-arm'
+377 silly reify ]
+378 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@img/sharp-libvips-darwin-x64
+379 silly reify mark deleted [
+379 silly reify   '/root/st-manager-termux-mobile/node_modules/@img/sharp-libvips-darwin-x64'
+379 silly reify ]
+380 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@img/sharp-libvips-darwin-arm64
+381 silly reify mark deleted [
+381 silly reify   '/root/st-manager-termux-mobile/node_modules/@img/sharp-libvips-darwin-arm64'
+381 silly reify ]
+382 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@img/sharp-darwin-x64
+383 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@img/sharp-darwin-x64' ]
+384 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@img/sharp-darwin-arm64
+385 silly reify mark deleted [
+385 silly reify   '/root/st-manager-termux-mobile/node_modules/@img/sharp-darwin-arm64'
+385 silly reify ]
+386 timing reifyNode:node_modules/fsevents Completed in 47ms
+387 timing reifyNode:node_modules/@next/swc-win32-x64-msvc Completed in 42ms
+388 timing reifyNode:node_modules/@next/swc-win32-arm64-msvc Completed in 43ms
+389 timing reifyNode:node_modules/@next/swc-linux-arm64-musl Completed in 43ms
+390 timing reifyNode:node_modules/@next/swc-linux-arm64-gnu Completed in 43ms
+391 timing reifyNode:node_modules/@next/swc-darwin-x64 Completed in 43ms
+392 timing reifyNode:node_modules/@next/swc-darwin-arm64 Completed in 43ms
+393 timing reifyNode:node_modules/@img/sharp-win32-x64 Completed in 43ms
+394 timing reifyNode:node_modules/@img/sharp-win32-ia32 Completed in 43ms
+395 timing reifyNode:node_modules/@img/sharp-win32-arm64 Completed in 44ms
+396 timing reifyNode:node_modules/@img/sharp-wasm32 Completed in 44ms
+397 timing reifyNode:node_modules/@img/sharp-linuxmusl-arm64 Completed in 44ms
+398 timing reifyNode:node_modules/@img/sharp-linux-s390x Completed in 44ms
+399 timing reifyNode:node_modules/@img/sharp-linux-riscv64 Completed in 44ms
+400 timing reifyNode:node_modules/@img/sharp-linux-ppc64 Completed in 44ms
+401 timing reifyNode:node_modules/@img/sharp-linux-arm64 Completed in 44ms
+402 timing reifyNode:node_modules/@img/sharp-linux-arm Completed in 45ms
+403 timing reifyNode:node_modules/@img/sharp-libvips-linuxmusl-arm64 Completed in 45ms
+404 timing reifyNode:node_modules/@img/sharp-libvips-linux-s390x Completed in 50ms
+405 timing reifyNode:node_modules/@img/sharp-libvips-linux-riscv64 Completed in 50ms
+406 timing reifyNode:node_modules/@img/sharp-libvips-linux-ppc64 Completed in 51ms
+407 timing reifyNode:node_modules/@img/sharp-libvips-linux-arm64 Completed in 51ms
+408 timing reifyNode:node_modules/@img/sharp-libvips-linux-arm Completed in 51ms
+409 timing reifyNode:node_modules/@img/sharp-libvips-darwin-x64 Completed in 51ms
+410 timing reifyNode:node_modules/@img/sharp-libvips-darwin-arm64 Completed in 51ms
+411 timing reifyNode:node_modules/@img/sharp-darwin-x64 Completed in 53ms
+412 timing reifyNode:node_modules/@img/sharp-darwin-arm64 Completed in 53ms
+413 silly tarball no local data for util-deprecate@https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz. Extracting by manifest.
+414 silly tarball no local data for use-sync-external-store@https://registry.npmjs.org/use-sync-external-store/-/use-sync-external-store-1.6.0.tgz. Extracting by manifest.
+415 silly tarball no local data for use-sidecar@https://registry.npmjs.org/use-sidecar/-/use-sidecar-1.1.3.tgz. Extracting by manifest.
+416 silly tarball no local data for use-callback-ref@https://registry.npmjs.org/use-callback-ref/-/use-callback-ref-1.3.3.tgz. Extracting by manifest.
+417 silly tarball no local data for tslib@https://registry.npmjs.org/tslib/-/tslib-2.8.1.tgz. Extracting by manifest.
+418 silly tarball no local data for ts-interface-checker@https://registry.npmjs.org/ts-interface-checker/-/ts-interface-checker-0.1.13.tgz. Extracting by manifest.
+419 silly tarball no local data for to-regex-range@https://registry.npmjs.org/to-regex-range/-/to-regex-range-5.0.1.tgz. Extracting by manifest.
+420 silly tarball no local data for tinyglobby@https://registry.npmjs.org/tinyglobby/-/tinyglobby-0.2.15.tgz. Extracting by manifest.
+421 silly tarball no local data for thenify-all@https://registry.npmjs.org/thenify-all/-/thenify-all-1.6.0.tgz. Extracting by manifest.
+422 silly tarball no local data for thenify@https://registry.npmjs.org/thenify/-/thenify-3.3.1.tgz. Extracting by manifest.
+423 silly tarball no local data for tailwindcss-animate@https://registry.npmjs.org/tailwindcss-animate/-/tailwindcss-animate-1.0.7.tgz. Extracting by manifest.
+424 silly tarball no local data for tailwindcss@https://registry.npmjs.org/tailwindcss/-/tailwindcss-3.4.19.tgz. Extracting by manifest.
+425 silly tarball no local data for tailwind-merge@https://registry.npmjs.org/tailwind-merge/-/tailwind-merge-2.6.1.tgz. Extracting by manifest.
+426 silly tarball no local data for swr@https://registry.npmjs.org/swr/-/swr-2.4.1.tgz. Extracting by manifest.
+427 silly tarball no local data for supports-preserve-symlinks-flag@https://registry.npmjs.org/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz. Extracting by manifest.
+428 silly tarball no local data for sucrase@https://registry.npmjs.org/sucrase/-/sucrase-3.35.1.tgz. Extracting by manifest.
+429 silly tarball no local data for styled-jsx@https://registry.npmjs.org/styled-jsx/-/styled-jsx-5.1.6.tgz. Extracting by manifest.
+430 silly tarball no local data for source-map-js@https://registry.npmjs.org/source-map-js/-/source-map-js-1.2.1.tgz. Extracting by manifest.
+431 silly tarball no local data for sonner@https://registry.npmjs.org/sonner/-/sonner-1.7.4.tgz. Extracting by manifest.
+432 silly tarball no local data for sharp@https://registry.npmjs.org/sharp/-/sharp-0.34.5.tgz. Extracting by manifest.
+433 silly tarball no local data for semver@https://registry.npmjs.org/semver/-/semver-7.7.4.tgz. Extracting by manifest.
+434 silly tarball no local data for scheduler@https://registry.npmjs.org/scheduler/-/scheduler-0.27.0.tgz. Extracting by manifest.
+435 silly tarball no local data for run-parallel@https://registry.npmjs.org/run-parallel/-/run-parallel-1.2.0.tgz. Extracting by manifest.
+436 silly tarball no local data for reusify@https://registry.npmjs.org/reusify/-/reusify-1.1.0.tgz. Extracting by manifest.
+437 silly tarball no local data for resolve@https://registry.npmjs.org/resolve/-/resolve-1.22.11.tgz. Extracting by manifest.
+438 silly tarball no local data for readdirp@https://registry.npmjs.org/readdirp/-/readdirp-3.6.0.tgz. Extracting by manifest.
+439 silly tarball no local data for read-cache@https://registry.npmjs.org/read-cache/-/read-cache-1.0.0.tgz. Extracting by manifest.
+440 silly tarball no local data for react-style-singleton@https://registry.npmjs.org/react-style-singleton/-/react-style-singleton-2.2.3.tgz. Extracting by manifest.
+441 silly tarball no local data for react-remove-scroll-bar@https://registry.npmjs.org/react-remove-scroll-bar/-/react-remove-scroll-bar-2.3.8.tgz. Extracting by manifest.
+442 silly tarball no local data for react-remove-scroll@https://registry.npmjs.org/react-remove-scroll/-/react-remove-scroll-2.7.2.tgz. Extracting by manifest.
+443 silly tarball no local data for react-dom@https://registry.npmjs.org/react-dom/-/react-dom-19.2.4.tgz. Extracting by manifest.
+444 silly tarball no local data for react@https://registry.npmjs.org/react/-/react-19.2.4.tgz. Extracting by manifest.
+445 silly tarball no local data for queue-microtask@https://registry.npmjs.org/queue-microtask/-/queue-microtask-1.2.3.tgz. Extracting by manifest.
+446 silly tarball no local data for postcss-value-parser@https://registry.npmjs.org/postcss-value-parser/-/postcss-value-parser-4.2.0.tgz. Extracting by manifest.
+447 silly tarball no local data for postcss-selector-parser@https://registry.npmjs.org/postcss-selector-parser/-/postcss-selector-parser-6.1.2.tgz. Extracting by manifest.
+448 silly tarball no local data for postcss-nested@https://registry.npmjs.org/postcss-nested/-/postcss-nested-6.2.0.tgz. Extracting by manifest.
+449 silly tarball no local data for postcss-load-config@https://registry.npmjs.org/postcss-load-config/-/postcss-load-config-6.0.1.tgz. Extracting by manifest.
+450 silly tarball no local data for postcss-js@https://registry.npmjs.org/postcss-js/-/postcss-js-4.1.0.tgz. Extracting by manifest.
+451 silly tarball no local data for postcss-import@https://registry.npmjs.org/postcss-import/-/postcss-import-15.1.0.tgz. Extracting by manifest.
+452 silly tarball no local data for postcss@https://registry.npmjs.org/postcss/-/postcss-8.5.6.tgz. Extracting by manifest.
+453 silly tarball no local data for pirates@https://registry.npmjs.org/pirates/-/pirates-4.0.7.tgz. Extracting by manifest.
+454 silly tarball no local data for pify@https://registry.npmjs.org/pify/-/pify-2.3.0.tgz. Extracting by manifest.
+455 silly tarball no local data for picomatch@https://registry.npmjs.org/picomatch/-/picomatch-2.3.1.tgz. Extracting by manifest.
+456 silly tarball no local data for picocolors@https://registry.npmjs.org/picocolors/-/picocolors-1.1.1.tgz. Extracting by manifest.
+457 silly tarball no local data for path-parse@https://registry.npmjs.org/path-parse/-/path-parse-1.0.7.tgz. Extracting by manifest.
+458 silly tarball no local data for object-hash@https://registry.npmjs.org/object-hash/-/object-hash-3.0.0.tgz. Extracting by manifest.
+459 silly tarball no local data for object-assign@https://registry.npmjs.org/object-assign/-/object-assign-4.1.1.tgz. Extracting by manifest.
+460 silly tarball no local data for normalize-path@https://registry.npmjs.org/normalize-path/-/normalize-path-3.0.0.tgz. Extracting by manifest.
+461 silly tarball no local data for next-themes@https://registry.npmjs.org/next-themes/-/next-themes-0.4.6.tgz. Extracting by manifest.
+462 silly tarball no local data for next@https://registry.npmjs.org/next/-/next-15.5.12.tgz. Extracting by manifest.
+463 silly tarball no local data for nanoid@https://registry.npmjs.org/nanoid/-/nanoid-3.3.11.tgz. Extracting by manifest.
+464 silly tarball no local data for mz@https://registry.npmjs.org/mz/-/mz-2.7.0.tgz. Extracting by manifest.
+465 silly tarball no local data for micromatch@https://registry.npmjs.org/micromatch/-/micromatch-4.0.8.tgz. Extracting by manifest.
+466 silly tarball no local data for merge2@https://registry.npmjs.org/merge2/-/merge2-1.4.1.tgz. Extracting by manifest.
+467 silly tarball no local data for lucide-react@https://registry.npmjs.org/lucide-react/-/lucide-react-0.468.0.tgz. Extracting by manifest.
+468 silly tarball no local data for lines-and-columns@https://registry.npmjs.org/lines-and-columns/-/lines-and-columns-1.2.4.tgz. Extracting by manifest.
+469 silly tarball no local data for lilconfig@https://registry.npmjs.org/lilconfig/-/lilconfig-3.1.3.tgz. Extracting by manifest.
+470 silly tarball no local data for jiti@https://registry.npmjs.org/jiti/-/jiti-1.21.7.tgz. Extracting by manifest.
+471 silly tarball no local data for is-number@https://registry.npmjs.org/is-number/-/is-number-7.0.0.tgz. Extracting by manifest.
+472 silly tarball no local data for is-glob@https://registry.npmjs.org/is-glob/-/is-glob-4.0.3.tgz. Extracting by manifest.
+473 silly tarball no local data for is-extglob@https://registry.npmjs.org/is-extglob/-/is-extglob-2.1.1.tgz. Extracting by manifest.
+474 silly tarball no local data for is-core-module@https://registry.npmjs.org/is-core-module/-/is-core-module-2.16.1.tgz. Extracting by manifest.
+475 silly tarball no local data for is-binary-path@https://registry.npmjs.org/is-binary-path/-/is-binary-path-2.1.0.tgz. Extracting by manifest.
+476 silly tarball no local data for hasown@https://registry.npmjs.org/hasown/-/hasown-2.0.2.tgz. Extracting by manifest.
+477 silly tarball no local data for glob-parent@https://registry.npmjs.org/glob-parent/-/glob-parent-6.0.2.tgz. Extracting by manifest.
+478 silly tarball no local data for get-nonce@https://registry.npmjs.org/get-nonce/-/get-nonce-1.0.1.tgz. Extracting by manifest.
+479 silly tarball no local data for function-bind@https://registry.npmjs.org/function-bind/-/function-bind-1.1.2.tgz. Extracting by manifest.
+480 silly tarball no local data for fill-range@https://registry.npmjs.org/fill-range/-/fill-range-7.1.1.tgz. Extracting by manifest.
+481 silly tarball no local data for fastq@https://registry.npmjs.org/fastq/-/fastq-1.20.1.tgz. Extracting by manifest.
+482 silly tarball no local data for dlv@https://registry.npmjs.org/dlv/-/dlv-1.1.3.tgz. Extracting by manifest.
+483 silly tarball no local data for didyoumean@https://registry.npmjs.org/didyoumean/-/didyoumean-1.2.2.tgz. Extracting by manifest.
+484 silly tarball no local data for detect-node-es@https://registry.npmjs.org/detect-node-es/-/detect-node-es-1.1.0.tgz. Extracting by manifest.
+485 silly tarball no local data for detect-libc@https://registry.npmjs.org/detect-libc/-/detect-libc-2.1.2.tgz. Extracting by manifest.
+486 silly tarball no local data for dequal@https://registry.npmjs.org/dequal/-/dequal-2.0.3.tgz. Extracting by manifest.
+487 silly tarball no local data for csstype@https://registry.npmjs.org/csstype/-/csstype-3.2.3.tgz. Extracting by manifest.
+488 silly tarball no local data for cssesc@https://registry.npmjs.org/cssesc/-/cssesc-3.0.0.tgz. Extracting by manifest.
+489 silly tarball no local data for commander@https://registry.npmjs.org/commander/-/commander-4.1.1.tgz. Extracting by manifest.
+490 silly tarball no local data for clsx@https://registry.npmjs.org/clsx/-/clsx-2.1.1.tgz. Extracting by manifest.
+491 silly tarball no local data for client-only@https://registry.npmjs.org/client-only/-/client-only-0.0.1.tgz. Extracting by manifest.
+492 silly tarball no local data for class-variance-authority@https://registry.npmjs.org/class-variance-authority/-/class-variance-authority-0.7.1.tgz. Extracting by manifest.
+493 silly tarball no local data for chokidar@https://registry.npmjs.org/chokidar/-/chokidar-3.6.0.tgz. Extracting by manifest.
+494 silly tarball no local data for caniuse-lite@https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001774.tgz. Extracting by manifest.
+495 silly tarball no local data for camelcase-css@https://registry.npmjs.org/camelcase-css/-/camelcase-css-2.0.1.tgz. Extracting by manifest.
+496 silly tarball no local data for braces@https://registry.npmjs.org/braces/-/braces-3.0.3.tgz. Extracting by manifest.
+497 silly tarball no local data for binary-extensions@https://registry.npmjs.org/binary-extensions/-/binary-extensions-2.3.0.tgz. Extracting by manifest.
+498 silly tarball no local data for aria-hidden@https://registry.npmjs.org/aria-hidden/-/aria-hidden-1.2.6.tgz. Extracting by manifest.
+499 silly tarball no local data for arg@https://registry.npmjs.org/arg/-/arg-5.0.2.tgz. Extracting by manifest.
+500 silly tarball no local data for anymatch@https://registry.npmjs.org/anymatch/-/anymatch-3.1.3.tgz. Extracting by manifest.
+501 silly tarball no local data for any-promise@https://registry.npmjs.org/any-promise/-/any-promise-1.3.0.tgz. Extracting by manifest.
+502 silly tarball no local data for @types/react-dom@https://registry.npmjs.org/@types/react-dom/-/react-dom-19.2.3.tgz. Extracting by manifest.
+503 silly tarball no local data for @types/react@https://registry.npmjs.org/@types/react/-/react-19.2.14.tgz. Extracting by manifest.
+504 silly tarball no local data for @swc/helpers@https://registry.npmjs.org/@swc/helpers/-/helpers-0.5.15.tgz. Extracting by manifest.
+505 silly tarball no local data for @radix-ui/rect@https://registry.npmjs.org/@radix-ui/rect/-/rect-1.1.1.tgz. Extracting by manifest.
+506 silly tarball no local data for @radix-ui/react-visually-hidden@https://registry.npmjs.org/@radix-ui/react-visually-hidden/-/react-visually-hidden-1.2.3.tgz. Extracting by manifest.
+507 silly tarball no local data for @radix-ui/react-use-size@https://registry.npmjs.org/@radix-ui/react-use-size/-/react-use-size-1.1.1.tgz. Extracting by manifest.
+508 silly tarball no local data for @radix-ui/react-use-rect@https://registry.npmjs.org/@radix-ui/react-use-rect/-/react-use-rect-1.1.1.tgz. Extracting by manifest.
+509 silly tarball no local data for @radix-ui/react-use-previous@https://registry.npmjs.org/@radix-ui/react-use-previous/-/react-use-previous-1.1.1.tgz. Extracting by manifest.
+510 silly tarball no local data for @radix-ui/react-use-layout-effect@https://registry.npmjs.org/@radix-ui/react-use-layout-effect/-/react-use-layout-effect-1.1.1.tgz. Extracting by manifest.
+511 silly tarball no local data for @radix-ui/react-use-is-hydrated@https://registry.npmjs.org/@radix-ui/react-use-is-hydrated/-/react-use-is-hydrated-0.1.0.tgz. Extracting by manifest.
+512 silly tarball no local data for @radix-ui/react-use-escape-keydown@https://registry.npmjs.org/@radix-ui/react-use-escape-keydown/-/react-use-escape-keydown-1.1.1.tgz. Extracting by manifest.
+513 silly tarball no local data for @radix-ui/react-use-effect-event@https://registry.npmjs.org/@radix-ui/react-use-effect-event/-/react-use-effect-event-0.0.2.tgz. Extracting by manifest.
+514 silly tarball no local data for @radix-ui/react-use-controllable-state@https://registry.npmjs.org/@radix-ui/react-use-controllable-state/-/react-use-controllable-state-1.2.2.tgz. Extracting by manifest.
+515 silly tarball no local data for @radix-ui/react-use-callback-ref@https://registry.npmjs.org/@radix-ui/react-use-callback-ref/-/react-use-callback-ref-1.1.1.tgz. Extracting by manifest.
+516 silly tarball no local data for @radix-ui/react-tooltip@https://registry.npmjs.org/@radix-ui/react-tooltip/-/react-tooltip-1.2.8.tgz. Extracting by manifest.
+517 silly tarball no local data for @radix-ui/react-tabs@https://registry.npmjs.org/@radix-ui/react-tabs/-/react-tabs-1.1.13.tgz. Extracting by manifest.
+518 silly tarball no local data for @radix-ui/react-slot@https://registry.npmjs.org/@radix-ui/react-slot/-/react-slot-1.2.4.tgz. Extracting by manifest.
+519 silly tarball no local data for @radix-ui/react-separator@https://registry.npmjs.org/@radix-ui/react-separator/-/react-separator-1.1.8.tgz. Extracting by manifest.
+520 silly tarball no local data for @radix-ui/react-select@https://registry.npmjs.org/@radix-ui/react-select/-/react-select-2.2.6.tgz. Extracting by manifest.
+521 silly tarball no local data for @radix-ui/react-scroll-area@https://registry.npmjs.org/@radix-ui/react-scroll-area/-/react-scroll-area-1.2.10.tgz. Extracting by manifest.
+522 silly tarball no local data for @radix-ui/react-roving-focus@https://registry.npmjs.org/@radix-ui/react-roving-focus/-/react-roving-focus-1.1.11.tgz. Extracting by manifest.
+523 silly tarball no local data for @radix-ui/react-primitive@https://registry.npmjs.org/@radix-ui/react-primitive/-/react-primitive-2.1.3.tgz. Extracting by manifest.
+524 silly tarball no local data for @radix-ui/react-presence@https://registry.npmjs.org/@radix-ui/react-presence/-/react-presence-1.1.5.tgz. Extracting by manifest.
+525 silly tarball no local data for @radix-ui/react-portal@https://registry.npmjs.org/@radix-ui/react-portal/-/react-portal-1.1.9.tgz. Extracting by manifest.
+526 silly tarball no local data for @radix-ui/react-popper@https://registry.npmjs.org/@radix-ui/react-popper/-/react-popper-1.2.8.tgz. Extracting by manifest.
+527 silly tarball no local data for @radix-ui/react-menu@https://registry.npmjs.org/@radix-ui/react-menu/-/react-menu-2.1.16.tgz. Extracting by manifest.
+528 silly tarball no local data for @radix-ui/react-label@https://registry.npmjs.org/@radix-ui/react-label/-/react-label-2.1.8.tgz. Extracting by manifest.
+529 silly tarball no local data for @radix-ui/react-id@https://registry.npmjs.org/@radix-ui/react-id/-/react-id-1.1.1.tgz. Extracting by manifest.
+530 silly tarball no local data for @radix-ui/react-focus-scope@https://registry.npmjs.org/@radix-ui/react-focus-scope/-/react-focus-scope-1.1.7.tgz. Extracting by manifest.
+531 silly tarball no local data for @radix-ui/react-focus-guards@https://registry.npmjs.org/@radix-ui/react-focus-guards/-/react-focus-guards-1.1.3.tgz. Extracting by manifest.
+532 silly tarball no local data for @radix-ui/react-dropdown-menu@https://registry.npmjs.org/@radix-ui/react-dropdown-menu/-/react-dropdown-menu-2.1.16.tgz. Extracting by manifest.
+533 silly tarball no local data for @radix-ui/react-dismissable-layer@https://registry.npmjs.org/@radix-ui/react-dismissable-layer/-/react-dismissable-layer-1.1.11.tgz. Extracting by manifest.
+534 silly tarball no local data for @radix-ui/react-direction@https://registry.npmjs.org/@radix-ui/react-direction/-/react-direction-1.1.1.tgz. Extracting by manifest.
+535 silly tarball no local data for @radix-ui/react-dialog@https://registry.npmjs.org/@radix-ui/react-dialog/-/react-dialog-1.1.15.tgz. Extracting by manifest.
+536 silly tarball no local data for @radix-ui/react-context@https://registry.npmjs.org/@radix-ui/react-context/-/react-context-1.1.2.tgz. Extracting by manifest.
+537 silly tarball no local data for @radix-ui/react-compose-refs@https://registry.npmjs.org/@radix-ui/react-compose-refs/-/react-compose-refs-1.1.2.tgz. Extracting by manifest.
+538 silly tarball no local data for @radix-ui/react-collection@https://registry.npmjs.org/@radix-ui/react-collection/-/react-collection-1.1.7.tgz. Extracting by manifest.
+539 silly tarball no local data for @radix-ui/react-avatar@https://registry.npmjs.org/@radix-ui/react-avatar/-/react-avatar-1.1.11.tgz. Extracting by manifest.
+540 silly tarball no local data for @radix-ui/react-arrow@https://registry.npmjs.org/@radix-ui/react-arrow/-/react-arrow-1.1.7.tgz. Extracting by manifest.
+541 silly tarball no local data for @radix-ui/react-alert-dialog@https://registry.npmjs.org/@radix-ui/react-alert-dialog/-/react-alert-dialog-1.1.15.tgz. Extracting by manifest.
+542 silly tarball no local data for @radix-ui/primitive@https://registry.npmjs.org/@radix-ui/primitive/-/primitive-1.1.3.tgz. Extracting by manifest.
+543 silly tarball no local data for @radix-ui/number@https://registry.npmjs.org/@radix-ui/number/-/number-1.1.1.tgz. Extracting by manifest.
+544 silly tarball no local data for @nodelib/fs.walk@https://registry.npmjs.org/@nodelib/fs.walk/-/fs.walk-1.2.8.tgz. Extracting by manifest.
+545 silly tarball no local data for @nodelib/fs.stat@https://registry.npmjs.org/@nodelib/fs.stat/-/fs.stat-2.0.5.tgz. Extracting by manifest.
+546 silly tarball no local data for @nodelib/fs.scandir@https://registry.npmjs.org/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz. Extracting by manifest.
+547 silly tarball no local data for @next/swc-linux-x64-musl@https://registry.npmjs.org/@next/swc-linux-x64-musl/-/swc-linux-x64-musl-15.5.12.tgz. Extracting by manifest.
+548 silly tarball no local data for @next/swc-linux-x64-gnu@https://registry.npmjs.org/@next/swc-linux-x64-gnu/-/swc-linux-x64-gnu-15.5.12.tgz. Extracting by manifest.
+549 silly tarball no local data for @next/env@https://registry.npmjs.org/@next/env/-/env-15.5.12.tgz. Extracting by manifest.
+550 silly tarball no local data for @jridgewell/trace-mapping@https://registry.npmjs.org/@jridgewell/trace-mapping/-/trace-mapping-0.3.31.tgz. Extracting by manifest.
+551 silly tarball no local data for @jridgewell/sourcemap-codec@https://registry.npmjs.org/@jridgewell/sourcemap-codec/-/sourcemap-codec-1.5.5.tgz. Extracting by manifest.
+552 silly tarball no local data for @jridgewell/resolve-uri@https://registry.npmjs.org/@jridgewell/resolve-uri/-/resolve-uri-3.1.2.tgz. Extracting by manifest.
+553 silly tarball no local data for @jridgewell/gen-mapping@https://registry.npmjs.org/@jridgewell/gen-mapping/-/gen-mapping-0.3.13.tgz. Extracting by manifest.
+554 silly tarball no local data for @img/sharp-linuxmusl-x64@https://registry.npmjs.org/@img/sharp-linuxmusl-x64/-/sharp-linuxmusl-x64-0.34.5.tgz. Extracting by manifest.
+555 silly tarball no local data for @img/sharp-linux-x64@https://registry.npmjs.org/@img/sharp-linux-x64/-/sharp-linux-x64-0.34.5.tgz. Extracting by manifest.
+556 silly tarball no local data for @img/sharp-libvips-linuxmusl-x64@https://registry.npmjs.org/@img/sharp-libvips-linuxmusl-x64/-/sharp-libvips-linuxmusl-x64-1.2.4.tgz. Extracting by manifest.
+557 silly tarball no local data for @img/sharp-libvips-linux-x64@https://registry.npmjs.org/@img/sharp-libvips-linux-x64/-/sharp-libvips-linux-x64-1.2.4.tgz. Extracting by manifest.
+558 silly tarball no local data for @img/colour@https://registry.npmjs.org/@img/colour/-/colour-1.0.0.tgz. Extracting by manifest.
+559 silly tarball no local data for @floating-ui/utils@https://registry.npmjs.org/@floating-ui/utils/-/utils-0.2.10.tgz. Extracting by manifest.
+560 silly tarball no local data for @floating-ui/react-dom@https://registry.npmjs.org/@floating-ui/react-dom/-/react-dom-2.1.7.tgz. Extracting by manifest.
+561 silly tarball no local data for @floating-ui/dom@https://registry.npmjs.org/@floating-ui/dom/-/dom-1.7.5.tgz. Extracting by manifest.
+562 silly tarball no local data for @floating-ui/core@https://registry.npmjs.org/@floating-ui/core/-/core-1.7.4.tgz. Extracting by manifest.
+563 silly tarball no local data for @emnapi/runtime@https://registry.npmjs.org/@emnapi/runtime/-/runtime-1.8.1.tgz. Extracting by manifest.
+564 silly tarball no local data for @alloc/quick-lru@https://registry.npmjs.org/@alloc/quick-lru/-/quick-lru-5.2.0.tgz. Extracting by manifest.
+565 silly tarball no local data for picomatch@https://registry.npmjs.org/picomatch/-/picomatch-4.0.3.tgz. Extracting by manifest.
+566 silly tarball no local data for fdir@https://registry.npmjs.org/fdir/-/fdir-6.5.0.tgz. Extracting by manifest.
+567 silly tarball no local data for fast-glob@https://registry.npmjs.org/fast-glob/-/fast-glob-3.3.3.tgz. Extracting by manifest.
+568 silly tarball no local data for glob-parent@https://registry.npmjs.org/glob-parent/-/glob-parent-5.1.2.tgz. Extracting by manifest.
+569 silly tarball no local data for postcss@https://registry.npmjs.org/postcss/-/postcss-8.4.31.tgz. Extracting by manifest.
+570 silly tarball no local data for glob-parent@https://registry.npmjs.org/glob-parent/-/glob-parent-5.1.2.tgz. Extracting by manifest.
+571 silly tarball no local data for @radix-ui/react-slot@https://registry.npmjs.org/@radix-ui/react-slot/-/react-slot-1.2.3.tgz. Extracting by manifest.
+572 silly tarball no local data for @radix-ui/react-primitive@https://registry.npmjs.org/@radix-ui/react-primitive/-/react-primitive-2.1.4.tgz. Extracting by manifest.
+573 silly tarball no local data for @radix-ui/react-slot@https://registry.npmjs.org/@radix-ui/react-slot/-/react-slot-1.2.3.tgz. Extracting by manifest.
+574 silly tarball no local data for @radix-ui/react-slot@https://registry.npmjs.org/@radix-ui/react-slot/-/react-slot-1.2.3.tgz. Extracting by manifest.
+575 silly tarball no local data for @radix-ui/react-slot@https://registry.npmjs.org/@radix-ui/react-slot/-/react-slot-1.2.3.tgz. Extracting by manifest.
+576 silly tarball no local data for @radix-ui/react-primitive@https://registry.npmjs.org/@radix-ui/react-primitive/-/react-primitive-2.1.4.tgz. Extracting by manifest.
+577 silly tarball no local data for @radix-ui/react-slot@https://registry.npmjs.org/@radix-ui/react-slot/-/react-slot-1.2.3.tgz. Extracting by manifest.
+578 silly tarball no local data for @radix-ui/react-slot@https://registry.npmjs.org/@radix-ui/react-slot/-/react-slot-1.2.3.tgz. Extracting by manifest.
+579 silly tarball no local data for @radix-ui/react-primitive@https://registry.npmjs.org/@radix-ui/react-primitive/-/react-primitive-2.1.4.tgz. Extracting by manifest.
+580 silly tarball no local data for @radix-ui/react-context@https://registry.npmjs.org/@radix-ui/react-context/-/react-context-1.1.3.tgz. Extracting by manifest.
+581 silly tarball no local data for @radix-ui/react-slot@https://registry.npmjs.org/@radix-ui/react-slot/-/react-slot-1.2.3.tgz. Extracting by manifest.
+582 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/sharp
+583 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/sharp' ]
+584 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@img/colour
+585 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@img/colour' ]
+586 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/detect-libc
+587 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/detect-libc' ]
+588 timing reifyNode:node_modules/sharp Completed in 22701ms
+589 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/detect-libc
+590 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/detect-libc' ]
+591 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/sharp
+592 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/sharp' ]
+593 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@img/colour
+594 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@img/colour' ]
+595 timing reifyNode:node_modules/detect-libc Completed in 22776ms
+596 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@next/swc-linux-x64-musl
+597 silly reify mark deleted [
+597 silly reify   '/root/st-manager-termux-mobile/node_modules/@next/swc-linux-x64-musl'
+597 silly reify ]
+598 timing reifyNode:node_modules/@next/swc-linux-x64-musl Completed in 22904ms
+599 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@next/swc-linux-x64-gnu
+600 silly reify mark deleted [
+600 silly reify   '/root/st-manager-termux-mobile/node_modules/@next/swc-linux-x64-gnu'
+600 silly reify ]
+601 timing reifyNode:node_modules/@next/swc-linux-x64-gnu Completed in 22930ms
+602 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@img/sharp-linuxmusl-x64
+603 silly reify mark deleted [
+603 silly reify   '/root/st-manager-termux-mobile/node_modules/@img/sharp-linuxmusl-x64'
+603 silly reify ]
+604 timing reifyNode:node_modules/@img/sharp-linuxmusl-x64 Completed in 22931ms
+605 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@img/sharp-linux-x64
+606 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@img/sharp-linux-x64' ]
+607 timing reifyNode:node_modules/@img/sharp-linux-x64 Completed in 22931ms
+608 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@img/sharp-libvips-linuxmusl-x64
+609 silly reify mark deleted [
+609 silly reify   '/root/st-manager-termux-mobile/node_modules/@img/sharp-libvips-linuxmusl-x64'
+609 silly reify ]
+610 timing reifyNode:node_modules/@img/sharp-libvips-linuxmusl-x64 Completed in 22932ms
+611 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@img/sharp-libvips-linux-x64
+612 silly reify mark deleted [
+612 silly reify   '/root/st-manager-termux-mobile/node_modules/@img/sharp-libvips-linux-x64'
+612 silly reify ]
+613 timing reifyNode:node_modules/@img/sharp-libvips-linux-x64 Completed in 22932ms
+614 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@img/colour
+615 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@img/colour' ]
+616 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/sharp
+617 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/sharp' ]
+618 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/detect-libc
+619 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/detect-libc' ]
+620 timing reifyNode:node_modules/@img/colour Completed in 22933ms
+621 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@emnapi/runtime
+622 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@emnapi/runtime' ]
+623 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@img/sharp-wasm32
+624 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@img/sharp-wasm32' ]
+625 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@napi-rs/wasm-runtime
+626 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@napi-rs/wasm-runtime' ]
+627 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@unrs/resolver-binding-wasm32-wasi
+628 silly reify mark deleted [
+628 silly reify   '/root/st-manager-termux-mobile/node_modules/@unrs/resolver-binding-wasm32-wasi'
+628 silly reify ]
+629 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@emnapi/core
+630 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@emnapi/core' ]
+631 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@tybys/wasm-util
+632 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@tybys/wasm-util' ]
+633 verbose reify failed optional dependency /root/st-manager-termux-mobile/node_modules/@emnapi/wasi-threads
+634 silly reify mark deleted [ '/root/st-manager-termux-mobile/node_modules/@emnapi/wasi-threads' ]
+635 timing reifyNode:node_modules/@emnapi/runtime Completed in 22948ms
+636 timing reify:rollback:createSparse Completed in 94ms
+637 timing reify:rollback:retireShallow Completed in 0ms
+638 timing command:ci Completed in 23732ms
+639 verbose type system
+640 verbose stack FetchError: request to https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz failed, reason: getaddrinfo EAI_AGAIN registry.npmjs.org
+640 verbose stack     at ClientRequest.<anonymous> (/usr/share/nodejs/minipass-fetch/lib/index.js:130:14)
+640 verbose stack     at ClientRequest.emit (node:events:517:28)
+640 verbose stack     at TLSSocket.socketErrorListener (node:_http_client:501:9)
+640 verbose stack     at TLSSocket.emit (node:events:529:35)
+640 verbose stack     at emitErrorNT (node:internal/streams/destroy:151:8)
+640 verbose stack     at emitErrorCloseNT (node:internal/streams/destroy:116:3)
+640 verbose stack     at process.processTicksAndRejections (node:internal/process/task_queues:82:21)
+641 verbose cwd /root/st-manager-termux-mobile
+642 verbose Linux 6.1.0-42-amd64
+643 verbose node v18.20.4
+644 verbose npm  v9.2.0
+645 error code EAI_AGAIN
+646 error syscall getaddrinfo
+647 error errno EAI_AGAIN
+648 error request to https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz failed, reason: getaddrinfo EAI_AGAIN registry.npmjs.org
+649 verbose exit 1
+650 timing npm Completed in 23793ms
+651 verbose unfinished npm timer reify 1772299500762
+652 verbose unfinished npm timer reify:unpack 1772299500935
+653 verbose unfinished npm timer reifyNode:node_modules/util-deprecate 1772299500936
+654 verbose unfinished npm timer reifyNode:node_modules/use-sync-external-store 1772299500936
+655 verbose unfinished npm timer reifyNode:node_modules/use-sidecar 1772299500936
+656 verbose unfinished npm timer reifyNode:node_modules/use-callback-ref 1772299500936
+657 verbose unfinished npm timer reifyNode:node_modules/tslib 1772299500936
+658 verbose unfinished npm timer reifyNode:node_modules/ts-interface-checker 1772299500936
+659 verbose unfinished npm timer reifyNode:node_modules/to-regex-range 1772299500936
+660 verbose unfinished npm timer reifyNode:node_modules/tinyglobby 1772299500936
+661 verbose unfinished npm timer reifyNode:node_modules/tinyglobby/node_modules/picomatch 1772299500936
+662 verbose unfinished npm timer reifyNode:node_modules/tinyglobby/node_modules/fdir 1772299500936
+663 verbose unfinished npm timer reifyNode:node_modules/thenify-all 1772299500936
+664 verbose unfinished npm timer reifyNode:node_modules/thenify 1772299500936
+665 verbose unfinished npm timer reifyNode:node_modules/tailwindcss-animate 1772299500936
+666 verbose unfinished npm timer reifyNode:node_modules/tailwindcss 1772299500936
+667 verbose unfinished npm timer reifyNode:node_modules/tailwindcss/node_modules/fast-glob 1772299500937
+668 verbose unfinished npm timer reifyNode:node_modules/tailwindcss/node_modules/fast-glob/node_modules/glob-parent 1772299500937
+669 verbose unfinished npm timer reifyNode:node_modules/tailwind-merge 1772299500937
+670 verbose unfinished npm timer reifyNode:node_modules/swr 1772299500937
+671 verbose unfinished npm timer reifyNode:node_modules/supports-preserve-symlinks-flag 1772299500937
+672 verbose unfinished npm timer reifyNode:node_modules/sucrase 1772299500937
+673 verbose unfinished npm timer reifyNode:node_modules/styled-jsx 1772299500937
+674 verbose unfinished npm timer reifyNode:node_modules/source-map-js 1772299500937
+675 verbose unfinished npm timer reifyNode:node_modules/sonner 1772299500937
+676 verbose unfinished npm timer reifyNode:node_modules/semver 1772299500937
+677 verbose unfinished npm timer reifyNode:node_modules/scheduler 1772299500937
+678 verbose unfinished npm timer reifyNode:node_modules/run-parallel 1772299500937
+679 verbose unfinished npm timer reifyNode:node_modules/reusify 1772299500937
+680 verbose unfinished npm timer reifyNode:node_modules/resolve 1772299500937
+681 verbose unfinished npm timer reifyNode:node_modules/readdirp 1772299500937
+682 verbose unfinished npm timer reifyNode:node_modules/read-cache 1772299500937
+683 verbose unfinished npm timer reifyNode:node_modules/react-style-singleton 1772299500937
+684 verbose unfinished npm timer reifyNode:node_modules/react-remove-scroll-bar 1772299500937
+685 verbose unfinished npm timer reifyNode:node_modules/react-remove-scroll 1772299500937
+686 verbose unfinished npm timer reifyNode:node_modules/react-dom 1772299500937
+687 verbose unfinished npm timer reifyNode:node_modules/react 1772299500937
+688 verbose unfinished npm timer reifyNode:node_modules/queue-microtask 1772299500937
+689 verbose unfinished npm timer reifyNode:node_modules/postcss-value-parser 1772299500937
+690 verbose unfinished npm timer reifyNode:node_modules/postcss-selector-parser 1772299500937
+691 verbose unfinished npm timer reifyNode:node_modules/postcss-nested 1772299500937
+692 verbose unfinished npm timer reifyNode:node_modules/postcss-load-config 1772299500937
+693 verbose unfinished npm timer reifyNode:node_modules/postcss-js 1772299500937
+694 verbose unfinished npm timer reifyNode:node_modules/postcss-import 1772299500937
+695 verbose unfinished npm timer reifyNode:node_modules/postcss 1772299500937
+696 verbose unfinished npm timer reifyNode:node_modules/pirates 1772299500937
+697 verbose unfinished npm timer reifyNode:node_modules/pify 1772299500938
+698 verbose unfinished npm timer reifyNode:node_modules/picomatch 1772299500938
+699 verbose unfinished npm timer reifyNode:node_modules/picocolors 1772299500938
+700 verbose unfinished npm timer reifyNode:node_modules/path-parse 1772299500938
+701 verbose unfinished npm timer reifyNode:node_modules/object-hash 1772299500938
+702 verbose unfinished npm timer reifyNode:node_modules/object-assign 1772299500938
+703 verbose unfinished npm timer reifyNode:node_modules/normalize-path 1772299500938
+704 verbose unfinished npm timer reifyNode:node_modules/next-themes 1772299500938
+705 verbose unfinished npm timer reifyNode:node_modules/next 1772299500938
+706 verbose unfinished npm timer reifyNode:node_modules/next/node_modules/postcss 1772299500938
+707 verbose unfinished npm timer reifyNode:node_modules/nanoid 1772299500938
+708 verbose unfinished npm timer reifyNode:node_modules/mz 1772299500938
+709 verbose unfinished npm timer reifyNode:node_modules/micromatch 1772299500938
+710 verbose unfinished npm timer reifyNode:node_modules/merge2 1772299500938
+711 verbose unfinished npm timer reifyNode:node_modules/lucide-react 1772299500938
+712 verbose unfinished npm timer reifyNode:node_modules/lines-and-columns 1772299500938
+713 verbose unfinished npm timer reifyNode:node_modules/lilconfig 1772299500938
+714 verbose unfinished npm timer reifyNode:node_modules/jiti 1772299500938
+715 verbose unfinished npm timer reifyNode:node_modules/is-number 1772299500938
+716 verbose unfinished npm timer reifyNode:node_modules/is-glob 1772299500938
+717 verbose unfinished npm timer reifyNode:node_modules/is-extglob 1772299500938
+718 verbose unfinished npm timer reifyNode:node_modules/is-core-module 1772299500938
+719 verbose unfinished npm timer reifyNode:node_modules/is-binary-path 1772299500938
+720 verbose unfinished npm timer reifyNode:node_modules/hasown 1772299500938
+721 verbose unfinished npm timer reifyNode:node_modules/glob-parent 1772299500938
+722 verbose unfinished npm timer reifyNode:node_modules/get-nonce 1772299500938
+723 verbose unfinished npm timer reifyNode:node_modules/function-bind 1772299500938
+724 verbose unfinished npm timer reifyNode:node_modules/fill-range 1772299500938
+725 verbose unfinished npm timer reifyNode:node_modules/fastq 1772299500938
+726 verbose unfinished npm timer reifyNode:node_modules/dlv 1772299500939
+727 verbose unfinished npm timer reifyNode:node_modules/didyoumean 1772299500939
+728 verbose unfinished npm timer reifyNode:node_modules/detect-node-es 1772299500939
+729 verbose unfinished npm timer reifyNode:node_modules/dequal 1772299500939
+730 verbose unfinished npm timer reifyNode:node_modules/csstype 1772299500939
+731 verbose unfinished npm timer reifyNode:node_modules/cssesc 1772299500939
+732 verbose unfinished npm timer reifyNode:node_modules/commander 1772299500939
+733 verbose unfinished npm timer reifyNode:node_modules/clsx 1772299500939
+734 verbose unfinished npm timer reifyNode:node_modules/client-only 1772299500939
+735 verbose unfinished npm timer reifyNode:node_modules/class-variance-authority 1772299500939
+736 verbose unfinished npm timer reifyNode:node_modules/chokidar 1772299500939
+737 verbose unfinished npm timer reifyNode:node_modules/chokidar/node_modules/glob-parent 1772299500939
+738 verbose unfinished npm timer reifyNode:node_modules/caniuse-lite 1772299500939
+739 verbose unfinished npm timer reifyNode:node_modules/camelcase-css 1772299500939
+740 verbose unfinished npm timer reifyNode:node_modules/braces 1772299500939
+741 verbose unfinished npm timer reifyNode:node_modules/binary-extensions 1772299500939
+742 verbose unfinished npm timer reifyNode:node_modules/aria-hidden 1772299500939
+743 verbose unfinished npm timer reifyNode:node_modules/arg 1772299500939
+744 verbose unfinished npm timer reifyNode:node_modules/anymatch 1772299500939
+745 verbose unfinished npm timer reifyNode:node_modules/any-promise 1772299500939
+746 verbose unfinished npm timer reifyNode:node_modules/@types/react-dom 1772299500940
+747 verbose unfinished npm timer reifyNode:node_modules/@types/react 1772299500940
+748 verbose unfinished npm timer reifyNode:node_modules/@swc/helpers 1772299500942
+749 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/rect 1772299500942
+750 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-visually-hidden 1772299500942
+751 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-use-size 1772299500942
+752 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-use-rect 1772299500942
+753 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-use-previous 1772299500942
+754 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-use-layout-effect 1772299500942
+755 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-use-is-hydrated 1772299500942
+756 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-use-escape-keydown 1772299500942
+757 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-use-effect-event 1772299500942
+758 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-use-controllable-state 1772299500942
+759 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-use-callback-ref 1772299500942
+760 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-tooltip 1772299500942
+761 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-tooltip/node_modules/@radix-ui/react-slot 1772299500942
+762 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-tabs 1772299500942
+763 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-slot 1772299500942
+764 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-separator 1772299500942
+765 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-separator/node_modules/@radix-ui/react-primitive 1772299500942
+766 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-select 1772299500942
+767 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-select/node_modules/@radix-ui/react-slot 1772299500942
+768 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-scroll-area 1772299500942
+769 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-roving-focus 1772299500942
+770 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-primitive 1772299500942
+771 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-primitive/node_modules/@radix-ui/react-slot 1772299500942
+772 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-presence 1772299500942
+773 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-portal 1772299500942
+774 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-popper 1772299500942
+775 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-menu 1772299500942
+776 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-menu/node_modules/@radix-ui/react-slot 1772299500943
+777 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-label 1772299500943
+778 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-label/node_modules/@radix-ui/react-primitive 1772299500943
+779 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-id 1772299500943
+780 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-focus-scope 1772299500943
+781 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-focus-guards 1772299500943
+782 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-dropdown-menu 1772299500943
+783 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-dismissable-layer 1772299500943
+784 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-direction 1772299500943
+785 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-dialog 1772299500943
+786 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-dialog/node_modules/@radix-ui/react-slot 1772299500943
+787 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-context 1772299500943
+788 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-compose-refs 1772299500943
+789 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-collection 1772299500943
+790 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-collection/node_modules/@radix-ui/react-slot 1772299500943
+791 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-avatar 1772299500943
+792 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-avatar/node_modules/@radix-ui/react-primitive 1772299500943
+793 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-avatar/node_modules/@radix-ui/react-context 1772299500943
+794 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-arrow 1772299500943
+795 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-alert-dialog 1772299500943
+796 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/react-alert-dialog/node_modules/@radix-ui/react-slot 1772299500943
+797 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/primitive 1772299500943
+798 verbose unfinished npm timer reifyNode:node_modules/@radix-ui/number 1772299500943
+799 verbose unfinished npm timer reifyNode:node_modules/@nodelib/fs.walk 1772299500943
+800 verbose unfinished npm timer reifyNode:node_modules/@nodelib/fs.stat 1772299500943
+801 verbose unfinished npm timer reifyNode:node_modules/@nodelib/fs.scandir 1772299500943
+802 verbose unfinished npm timer reifyNode:node_modules/@next/env 1772299500943
+803 verbose unfinished npm timer reifyNode:node_modules/@jridgewell/trace-mapping 1772299500943
+804 verbose unfinished npm timer reifyNode:node_modules/@jridgewell/sourcemap-codec 1772299500943
+805 verbose unfinished npm timer reifyNode:node_modules/@jridgewell/resolve-uri 1772299500943
+806 verbose unfinished npm timer reifyNode:node_modules/@jridgewell/gen-mapping 1772299500943
+807 verbose unfinished npm timer reifyNode:node_modules/@floating-ui/utils 1772299500943
+808 verbose unfinished npm timer reifyNode:node_modules/@floating-ui/react-dom 1772299500943
+809 verbose unfinished npm timer reifyNode:node_modules/@floating-ui/dom 1772299500943
+810 verbose unfinished npm timer reifyNode:node_modules/@floating-ui/core 1772299500943
+811 verbose unfinished npm timer reifyNode:node_modules/@alloc/quick-lru 1772299500943
+812 verbose code 1
+813 error A complete log of this run can be found in:
+813 error     /root/st-manager-termux-mobile/.npm-cache/_logs/2026-02-28T17_25_00_214Z-debug-0.log

@@ -5,21 +5,28 @@ REPO_URL="${REPO_URL:-https://github.com/qishiwan16-hub/st-manager-termux-mobile
 BRANCH="${BRANCH:-main}"
 APP_DIR="${APP_DIR:-$HOME/apps/st-manager-termux-mobile}"
 INSTALL_STAGE="${INSTALL_STAGE:-bootstrap}"
+
 ST_MANAGER_HOST_INPUT="${ST_MANAGER_HOST:-}"
 HOST="${ST_MANAGER_HOST_INPUT:-127.0.0.1}"
 PORT="${PORT:-3456}"
+
 DATA_PATH_INPUT="${DATA_PATH:-}"
 DATA_PATH=""
-FORCE_NPM_INSTALL="${FORCE_NPM_INSTALL:-0}"
 SHARED_STORAGE_READY=0
+
+FORCE_NPM_INSTALL="${FORCE_NPM_INSTALL:-0}"
+NPM_CACHE_DIR="${NPM_CACHE_DIR:-$APP_DIR/.npm-cache}"
 NPM_HEARTBEAT_SECONDS="${NPM_HEARTBEAT_SECONDS:-10}"
-NPM_INSTALL_TIMEOUT_SECONDS="${NPM_INSTALL_TIMEOUT_SECONDS:-900}"
-NPM_CACHE_DIR="${NPM_CACHE_DIR:-$HOME/.npm}"
+NPM_INSTALL_TIMEOUT_SECONDS="${NPM_INSTALL_TIMEOUT_SECONDS:-1200}"
 NPM_FETCH_RETRIES="${NPM_FETCH_RETRIES:-2}"
 NPM_FETCH_RETRY_MINTIMEOUT="${NPM_FETCH_RETRY_MINTIMEOUT:-2000}"
 NPM_FETCH_RETRY_MAXTIMEOUT="${NPM_FETCH_RETRY_MAXTIMEOUT:-20000}"
 NPM_FETCH_TIMEOUT="${NPM_FETCH_TIMEOUT:-60000}"
 NPM_LOG_TAIL_LINES="${NPM_LOG_TAIL_LINES:-80}"
+NPM_INSTALL_RETRY_COUNT="${NPM_INSTALL_RETRY_COUNT:-3}"
+NPM_INSTALL_RETRY_DELAY_SECONDS="${NPM_INSTALL_RETRY_DELAY_SECONDS:-5}"
+NPM_REGISTRY_PRIMARY="${NPM_REGISTRY_PRIMARY:-https://registry.npmjs.org/}"
+NPM_REGISTRY_FALLBACK="${NPM_REGISTRY_FALLBACK:-https://registry.npmmirror.com/}"
 
 is_termux_env() {
   if command -v pkg >/dev/null 2>&1; then
@@ -60,12 +67,50 @@ install_base_packages() {
   $sudo_cmd apt-get install -y nodejs npm git curl jq tmux lsof cron ca-certificates
 }
 
+prompt_access_mode() {
+  if [ -n "$ST_MANAGER_HOST_INPUT" ]; then
+    HOST="$ST_MANAGER_HOST_INPUT"
+    return 0
+  fi
+
+  if [ ! -t 0 ]; then
+    HOST="127.0.0.1"
+    echo "No interactive terminal detected, defaulting to local access (127.0.0.1)."
+    return 0
+  fi
+
+  echo "请选择访问模式:"
+  echo "  1) 本地访问 (127.0.0.1)"
+  echo "  2) 公网访问 (0.0.0.0)"
+
+  while true; do
+    printf "请输入选项 [1/2] (默认 1): "
+    local choice=""
+    IFS= read -r choice || choice=""
+    case "${choice:-1}" in
+      1)
+        HOST="127.0.0.1"
+        break
+        ;;
+      2)
+        HOST="0.0.0.0"
+        echo "WARN: 已启用公网监听，请确保已配置防火墙和鉴权。"
+        break
+        ;;
+      *)
+        echo "无效选项，请输入 1 或 2。"
+        ;;
+    esac
+  done
+
+  echo "Selected host: $HOST"
+}
+
 run_with_heartbeat() {
-  local start_ts
-  local pid
-  local rc
-  local timeout=0
+  local start_ts now_ts elapsed timeout pid rc
+  timeout=0
   start_ts="$(date +%s)"
+
   case "$NPM_INSTALL_TIMEOUT_SECONDS" in
     ''|*[!0-9]*) timeout=0 ;;
     *) timeout="$NPM_INSTALL_TIMEOUT_SECONDS" ;;
@@ -79,7 +124,7 @@ run_with_heartbeat() {
     if ! kill -0 "$pid" 2>/dev/null; then
       break
     fi
-    local now_ts elapsed
+
     now_ts="$(date +%s)"
     elapsed=$((now_ts - start_ts))
     echo "npm install in progress... ${elapsed}s elapsed"
@@ -99,35 +144,28 @@ run_with_heartbeat() {
   return "$rc"
 }
 
+latest_npm_log_file() {
+  ls -1t "$NPM_CACHE_DIR"/_logs/*-debug-0.log 2>/dev/null | head -n 1 || true
+}
+
 show_npm_install_diagnostics() {
   local latest_npm_log=""
-  latest_npm_log="$(ls -1t "$NPM_CACHE_DIR"/_logs/*-debug-0.log 2>/dev/null | head -n 1 || true)"
+  latest_npm_log="$(latest_npm_log_file)"
   if [ -n "$latest_npm_log" ]; then
     echo "--- npm log tail: $latest_npm_log ---"
     tail -n "$NPM_LOG_TAIL_LINES" "$latest_npm_log" || true
   fi
 }
 
-verify_runtime_dependencies() {
-  local missing=()
-  local dep
-  for dep in next react react-dom; do
-    if [ ! -d "$APP_DIR/node_modules/$dep" ]; then
-      missing+=("$dep")
-    fi
-  done
-
-  if [ "${#missing[@]}" -gt 0 ]; then
-    echo "ERROR: missing runtime dependencies after install: ${missing[*]}"
-    return 1
-  fi
-  return 0
+is_retryable_npm_error() {
+  local log_file="$1"
+  [ -n "$log_file" ] || return 1
+  grep -Eq "EAI_AGAIN|ENOTFOUND|ETIMEDOUT|ECONNRESET|getaddrinfo|network timeout" "$log_file"
 }
 
 dependency_signature() {
   local hash_cmd=""
-  local node_ver
-  local npm_ver
+  local node_ver npm_ver
   node_ver="$(node -v 2>/dev/null || echo unknown-node)"
   npm_ver="$(npm -v 2>/dev/null || echo unknown-npm)"
 
@@ -138,7 +176,6 @@ dependency_signature() {
   elif command -v md5sum >/dev/null 2>&1; then
     hash_cmd="md5sum"
   else
-    # Last-resort fallback when hash utilities are unavailable.
     node -e 'const fs=require("fs");const crypto=require("crypto");const app=process.argv[1];const nodeV=process.argv[2];const npmV=process.argv[3];let s=`node=${nodeV}\nnpm=${npmV}\n`;for(const f of ["package.json","package-lock.json"]){const p=`${app}/${f}`;if(fs.existsSync(p))s+=fs.readFileSync(p,"utf8")}process.stdout.write(crypto.createHash("sha256").update(s).digest("hex"))' "$APP_DIR" "$node_ver" "$npm_ver"
     return 0
   fi
@@ -146,22 +183,44 @@ dependency_signature() {
   {
     echo "node=$node_ver"
     echo "npm=$npm_ver"
-    if [ -f "$APP_DIR/package.json" ]; then
-      cat "$APP_DIR/package.json"
-    fi
-    if [ -f "$APP_DIR/package-lock.json" ]; then
-      cat "$APP_DIR/package-lock.json"
-    fi
-    :
+    [ -f "$APP_DIR/package.json" ] && cat "$APP_DIR/package.json"
+    [ -f "$APP_DIR/package-lock.json" ] && cat "$APP_DIR/package-lock.json"
   } | sh -c "$hash_cmd" | awk '{print $1}'
+}
+
+verify_runtime_dependencies() {
+  local dep
+  local missing=()
+
+  for dep in next react react-dom; do
+    if [ ! -f "$APP_DIR/node_modules/$dep/package.json" ]; then
+      missing+=("$dep")
+    fi
+  done
+
+  if [ "${#missing[@]}" -gt 0 ]; then
+    echo "ERROR: missing runtime dependency metadata: ${missing[*]}"
+    return 1
+  fi
+
+  if command -v node >/dev/null 2>&1; then
+    if ! (cd "$APP_DIR" && node -e 'for (const m of ["next","react","react-dom"]) require.resolve(m);') >/dev/null 2>&1; then
+      echo "ERROR: runtime dependency resolve check failed (next/react/react-dom)"
+      return 1
+    fi
+  fi
+
+  return 0
 }
 
 install_node_dependencies() {
   local stamp_file="$APP_DIR/.deps-installed.sig"
-  local sig_current
-  local sig_after
-  local sig_saved=""
+  local sig_current sig_saved sig_after
   local use_npm_ci=0
+  local npm_registry="$NPM_REGISTRY_PRIMARY"
+  local use_fallback_registry=0
+  local attempt=1 max_attempts=1 retry_delay=0
+  local install_rc=0 latest_npm_log=""
   local npm_base_args=(
     "--omit=dev"
     "--no-audit"
@@ -171,11 +230,15 @@ install_node_dependencies() {
   )
 
   sig_current="$(dependency_signature)"
+  sig_saved=""
   [ -f "$stamp_file" ] && sig_saved="$(cat "$stamp_file" 2>/dev/null || true)"
 
   if [ "$FORCE_NPM_INSTALL" != "1" ] && [ -d "$APP_DIR/node_modules" ] && [ "$sig_current" = "$sig_saved" ]; then
-    echo "Dependencies unchanged, skipping npm install."
-    return 0
+    if verify_runtime_dependencies; then
+      echo "Dependencies unchanged, skipping npm install."
+      return 0
+    fi
+    echo "WARN: dependency cache looks incomplete, forcing reinstall."
   fi
 
   if [ -f "$APP_DIR/package-lock.json" ]; then
@@ -184,6 +247,17 @@ install_node_dependencies() {
     echo "WARN: package-lock.json not found; first install may be slower."
   fi
 
+  case "$NPM_INSTALL_RETRY_COUNT" in
+    ''|*[!0-9]*) max_attempts=1 ;;
+    *) max_attempts="$NPM_INSTALL_RETRY_COUNT" ;;
+  esac
+  [ "$max_attempts" -lt 1 ] && max_attempts=1
+
+  case "$NPM_INSTALL_RETRY_DELAY_SECONDS" in
+    ''|*[!0-9]*) retry_delay=0 ;;
+    *) retry_delay="$NPM_INSTALL_RETRY_DELAY_SECONDS" ;;
+  esac
+
   mkdir -p "$NPM_CACHE_DIR"
   export npm_config_cache="$NPM_CACHE_DIR"
   export npm_config_fetch_retries="$NPM_FETCH_RETRIES"
@@ -191,40 +265,58 @@ install_node_dependencies() {
   export npm_config_fetch_retry_maxtimeout="$NPM_FETCH_RETRY_MAXTIMEOUT"
   export npm_config_fetch_timeout="$NPM_FETCH_TIMEOUT"
 
-  if [ "$use_npm_ci" = "1" ]; then
-    echo "Installing dependencies with: npm ci ${npm_base_args[*]}"
-  else
-    echo "Installing dependencies with: npm install ${npm_base_args[*]}"
+  cd "$APP_DIR"
+
+  while [ "$attempt" -le "$max_attempts" ]; do
+    export npm_config_registry="$npm_registry"
+    echo "Dependency install attempt ${attempt}/${max_attempts} (registry: $npm_config_registry)"
+
+    install_rc=0
+    if [ "$use_npm_ci" = "1" ]; then
+      run_with_heartbeat npm ci "${npm_base_args[@]}" || install_rc=$?
+    else
+      run_with_heartbeat npm install "${npm_base_args[@]}" || install_rc=$?
+    fi
+
+    if [ "$install_rc" -eq 0 ]; then
+      break
+    fi
+
+    latest_npm_log="$(latest_npm_log_file)"
+    show_npm_install_diagnostics
+
+    if [ "$attempt" -lt "$max_attempts" ] && { [ "$install_rc" -eq 124 ] || is_retryable_npm_error "$latest_npm_log"; }; then
+      if [ "$install_rc" -eq 124 ]; then
+        echo "Install attempt timed out, preparing retry..."
+      fi
+
+      if [ "$use_fallback_registry" = "0" ] && [ -n "$NPM_REGISTRY_FALLBACK" ] && [ "$NPM_REGISTRY_FALLBACK" != "$NPM_REGISTRY_PRIMARY" ]; then
+        use_fallback_registry=1
+        npm_registry="$NPM_REGISTRY_FALLBACK"
+        echo "Retryable network error detected; switching registry to: $npm_registry"
+      fi
+
+      if [ "$retry_delay" -gt 0 ]; then
+        echo "Retrying dependency install in ${retry_delay}s..."
+        sleep "$retry_delay"
+      else
+        echo "Retrying dependency install now..."
+      fi
+
+      attempt=$((attempt + 1))
+      continue
+    fi
+
+    return "$install_rc"
+  done
+
+  if [ "$attempt" -gt "$max_attempts" ]; then
+    return 1
   fi
 
-  cd "$APP_DIR"
-  if [ "$use_npm_ci" = "1" ]; then
-    if ! run_with_heartbeat npm ci "${npm_base_args[@]}"; then
-      show_npm_install_diagnostics
-      return 1
-    fi
-  else
-    if ! run_with_heartbeat npm install "${npm_base_args[@]}"; then
-      show_npm_install_diagnostics
-      return 1
-    fi
-  fi
   verify_runtime_dependencies
   sig_after="$(dependency_signature)"
   echo "$sig_after" >"$stamp_file"
-}
-
-show_runtime_diagnostics() {
-  local latest_log=""
-  echo "--- app-config.json ---"
-  cat "$APP_DIR/app-config.json" || true
-  echo "--- status ---"
-  PORT="$PORT" bash "$APP_DIR/scripts/status.sh" || true
-  latest_log="$(ls -1t "$APP_DIR"/logs/app-*.log 2>/dev/null | head -n 1 || true)"
-  if [ -n "${latest_log:-}" ]; then
-    echo "--- tail: $latest_log ---"
-    tail -n 120 "$latest_log" || true
-  fi
 }
 
 ensure_webpack_runtime() {
@@ -235,7 +327,7 @@ ensure_webpack_runtime() {
 
   echo "WARN: missing $runtime_file, creating fallback runtime"
   mkdir -p "$APP_DIR/.next/server"
-  cat >"$runtime_file" <<'EOF'
+  cat >"$runtime_file" <<'RUNTIME_EOF'
 "use strict";
 const path = require("path");
 const moduleFactories = Object.create(null);
@@ -295,7 +387,21 @@ __webpack_require__.X = (_unused, chunkIds, execute) => {
   return execute();
 };
 module.exports = __webpack_require__;
-EOF
+RUNTIME_EOF
+}
+
+show_runtime_diagnostics() {
+  local latest_log=""
+  echo "--- app-config.json ---"
+  cat "$APP_DIR/app-config.json" || true
+  echo "--- status ---"
+  PORT="$PORT" bash "$APP_DIR/scripts/status.sh" || true
+
+  latest_log="$(ls -1t "$APP_DIR"/logs/app-*.log 2>/dev/null | head -n 1 || true)"
+  if [ -n "$latest_log" ]; then
+    echo "--- tail: $latest_log ---"
+    tail -n 120 "$latest_log" || true
+  fi
 }
 
 sync_repo_from_github() {
@@ -360,22 +466,43 @@ setup_shared_storage_permission() {
   fi
 }
 
+fallback_data_path() {
+  local candidate
+  for candidate in \
+    "$HOME/.st-manager/data/default-user" \
+    "$APP_DIR/.data/default-user" \
+    "/tmp/st-manager-data"; do
+    if try_prepare_data_path "$candidate"; then
+      echo "WARN: fallback to writable DATA_PATH=$candidate"
+      return 0
+    fi
+  done
+  return 1
+}
+
 resolve_data_path() {
   if [ -n "$DATA_PATH_INPUT" ]; then
     if try_prepare_data_path "$DATA_PATH_INPUT"; then
       return 0
     fi
+
     if [[ "$DATA_PATH_INPUT" == /storage/* ]]; then
       setup_shared_storage_permission
       if try_prepare_data_path "$DATA_PATH_INPUT"; then
         return 0
       fi
     fi
-    echo "ERROR: DATA_PATH is not accessible: $DATA_PATH_INPUT"
-    echo "Tip: use either $HOME/.st-manager/data/default-user or /storage/emulated/0/SillyTavern/default-user"
+
+    echo "WARN: DATA_PATH is not accessible: $DATA_PATH_INPUT"
+    if fallback_data_path; then
+      return 0
+    fi
+
+    echo "ERROR: no writable fallback data path found"
     exit 1
   fi
 
+  local candidate
   for candidate in \
     "$HOME/.st-manager/data/default-user" \
     "$HOME/.local/share/SillyTavern/default-user" \
@@ -395,62 +522,22 @@ resolve_data_path() {
     fi
   done
 
-  for mount in /storage/*-*; do
-    [ -d "$mount" ] || continue
-    for candidate in \
-      "$mount/SillyTavern/default-user" \
-      "$mount/SillyTavern/data/default-user"; do
-      if try_prepare_data_path "$candidate"; then
-        return 0
-      fi
-    done
+  for candidate in /storage/*-*/SillyTavern/default-user /storage/*-*/SillyTavern/data/default-user; do
+    [ -d "$candidate" ] || continue
+    if try_prepare_data_path "$candidate"; then
+      return 0
+    fi
   done
 
+  if fallback_data_path; then
+    return 0
+  fi
+
   echo "ERROR: unable to find writable SillyTavern data path"
-  echo "Set it manually: DATA_PATH=$HOME/.st-manager/data/default-user bash install-termux.sh"
   exit 1
 }
 
-prompt_access_mode() {
-  if [ -n "$ST_MANAGER_HOST_INPUT" ]; then
-    HOST="$ST_MANAGER_HOST_INPUT"
-    return 0
-  fi
-
-  if [ ! -t 0 ]; then
-    HOST="127.0.0.1"
-    echo "No interactive terminal detected, defaulting to local access (127.0.0.1)."
-    return 0
-  fi
-
-  echo "请选择访问模式:"
-  echo "  1) 本地访问 (127.0.0.1)"
-  echo "  2) 公网访问 (0.0.0.0)"
-
-  while true; do
-    printf "请输入选项 [1/2] (默认 1): "
-    local access_choice=""
-    IFS= read -r access_choice || access_choice=""
-    case "${access_choice:-1}" in
-      1)
-        HOST="127.0.0.1"
-        break
-        ;;
-      2)
-        HOST="0.0.0.0"
-        echo "WARN: 已启用公网监听，请确保已配置防火墙和鉴权。"
-        break
-        ;;
-      *)
-        echo "无效选项，请输入 1 或 2。"
-        ;;
-    esac
-  done
-
-  echo "Selected host: $HOST"
-}
-
-if [ "$INSTALL_STAGE" = "bootstrap" ]; then
+bootstrap_stage() {
   echo "[1/4] Install base packages (compat mode)"
   install_base_packages
 
@@ -468,73 +555,104 @@ if [ "$INSTALL_STAGE" = "bootstrap" ]; then
     ST_MANAGER_HOST="$HOST" \
     PORT="$PORT" \
     DATA_PATH="$DATA_PATH_INPUT" \
+    FORCE_NPM_INSTALL="$FORCE_NPM_INSTALL" \
+    NPM_CACHE_DIR="$NPM_CACHE_DIR" \
+    NPM_HEARTBEAT_SECONDS="$NPM_HEARTBEAT_SECONDS" \
+    NPM_INSTALL_TIMEOUT_SECONDS="$NPM_INSTALL_TIMEOUT_SECONDS" \
+    NPM_FETCH_RETRIES="$NPM_FETCH_RETRIES" \
+    NPM_FETCH_RETRY_MINTIMEOUT="$NPM_FETCH_RETRY_MINTIMEOUT" \
+    NPM_FETCH_RETRY_MAXTIMEOUT="$NPM_FETCH_RETRY_MAXTIMEOUT" \
+    NPM_FETCH_TIMEOUT="$NPM_FETCH_TIMEOUT" \
+    NPM_LOG_TAIL_LINES="$NPM_LOG_TAIL_LINES" \
+    NPM_INSTALL_RETRY_COUNT="$NPM_INSTALL_RETRY_COUNT" \
+    NPM_INSTALL_RETRY_DELAY_SECONDS="$NPM_INSTALL_RETRY_DELAY_SECONDS" \
+    NPM_REGISTRY_PRIMARY="$NPM_REGISTRY_PRIMARY" \
+    NPM_REGISTRY_FALLBACK="$NPM_REGISTRY_FALLBACK" \
     bash "$APP_DIR/install-termux.sh"
-fi
+}
 
-prompt_access_mode
+deploy_stage() {
+  prompt_access_mode
 
-echo "[1/6] Prepare storage access (lazy mode)"
-echo "Shared storage permission will only be requested if /storage path is used."
+  echo "[1/6] Prepare storage access (lazy mode)"
+  echo "Shared storage permission will only be requested if /storage path is used."
 
-echo "[2/6] Resolve writable data path"
-resolve_data_path
-echo "Using DATA_PATH=$DATA_PATH"
+  echo "[2/6] Resolve writable data path"
+  resolve_data_path
+  echo "Using DATA_PATH=$DATA_PATH"
 
-cat >"$APP_DIR/app-config.json" <<EOF
+  cat >"$APP_DIR/app-config.json" <<CONFIG_EOF
 {
   "dataPath": "$DATA_PATH"
 }
-EOF
+CONFIG_EOF
 
-echo "[3/6] Install Node dependencies for mobile runtime"
-install_node_dependencies
-ensure_webpack_runtime
+  echo "[3/6] Install Node dependencies for mobile runtime"
+  install_node_dependencies
+  ensure_webpack_runtime
 
-echo "[4/6] Apply executable permissions"
-chmod +x install-termux.sh
-chmod +x scripts/*.sh
-chmod +x termux/runit/st-manager/run termux/runit/st-manager/log/run
+  echo "[4/6] Apply executable permissions"
+  chmod +x "$APP_DIR/install-termux.sh"
+  chmod +x "$APP_DIR"/scripts/*.sh
+  chmod +x "$APP_DIR/termux/runit/st-manager/run" "$APP_DIR/termux/runit/st-manager/log/run"
 
-echo "[5/6] Start service and run healthcheck"
-PORT="$PORT" bash scripts/stop.sh >/dev/null 2>&1 || true
-if ! ST_MANAGER_HOST="$HOST" PORT="$PORT" NODE_ENV=production DATA_ROOT="$DATA_PATH" bash scripts/start.sh; then
-  echo
-  echo "Initial start failed. Dumping diagnostics..."
-  show_runtime_diagnostics
-  latest_log="$(ls -1t "$APP_DIR"/logs/app-*.log 2>/dev/null | head -n 1 || true)"
-  if [ -n "${latest_log:-}" ] && grep -Eq "EADDRINUSE|address already in use" "$latest_log"; then
+  echo "[5/6] Start service and run healthcheck"
+  PORT="$PORT" bash "$APP_DIR/scripts/stop.sh" >/dev/null 2>&1 || true
+  if ! ST_MANAGER_HOST="$HOST" PORT="$PORT" NODE_ENV=production DATA_ROOT="$DATA_PATH" bash "$APP_DIR/scripts/start.sh"; then
     echo
-    echo "Detected port conflict, attempting one automatic restart..."
-    PORT="$PORT" bash scripts/stop.sh >/dev/null 2>&1 || true
-    sleep 1
-    ST_MANAGER_HOST="$HOST" PORT="$PORT" NODE_ENV=production DATA_ROOT="$DATA_PATH" bash scripts/start.sh
-  else
+    echo "Initial start failed. Dumping diagnostics..."
+    show_runtime_diagnostics
+
+    local latest_log
+    latest_log="$(ls -1t "$APP_DIR"/logs/app-*.log 2>/dev/null | head -n 1 || true)"
+    if [ -n "${latest_log:-}" ] && grep -Eq "EADDRINUSE|address already in use" "$latest_log"; then
+      echo
+      echo "Detected port conflict, attempting one automatic restart..."
+      PORT="$PORT" bash "$APP_DIR/scripts/stop.sh" >/dev/null 2>&1 || true
+      sleep 1
+      ST_MANAGER_HOST="$HOST" PORT="$PORT" NODE_ENV=production DATA_ROOT="$DATA_PATH" bash "$APP_DIR/scripts/start.sh"
+    else
+      exit 1
+    fi
+  fi
+
+  if ! ST_MANAGER_HOST="$HOST" PORT="$PORT" RETRY_COUNT=12 RETRY_DELAY=2 bash "$APP_DIR/scripts/healthcheck.sh"; then
+    echo
+    echo "Healthcheck failed. Dumping quick diagnostics..."
+    show_runtime_diagnostics
+    echo "--- curl /api/config ---"
+    curl -i -sS --max-time 10 "http://127.0.0.1:${PORT}/api/config" || true
+    echo
+    echo "Installer aborting due to unhealthy server."
     exit 1
   fi
-fi
-if ! ST_MANAGER_HOST="$HOST" PORT="$PORT" RETRY_COUNT=12 RETRY_DELAY=2 bash scripts/healthcheck.sh; then
-  echo
-  echo "Healthcheck failed. Dumping quick diagnostics..."
-  show_runtime_diagnostics
-  echo "--- curl /api/config ---"
-  curl -i -sS --max-time 10 "http://127.0.0.1:${PORT}/api/config" || true
-  echo
-  echo "Installer aborting due to unhealthy server."
-  exit 1
-fi
 
-echo "[6/6] Enable runit supervision (optional but recommended)"
-if command -v sv-enable >/dev/null 2>&1; then
-  sv-enable || true
-fi
-if command -v sv >/dev/null 2>&1; then
-  bash scripts/install-runit-service.sh || true
-fi
+  echo "[6/6] Enable runit supervision (optional but recommended)"
+  if command -v sv-enable >/dev/null 2>&1; then
+    sv-enable || true
+  fi
+  if command -v sv >/dev/null 2>&1; then
+    bash "$APP_DIR/scripts/install-runit-service.sh" || true
+  fi
 
-echo
-echo "Install complete."
-echo "URL: http://127.0.0.1:${PORT}"
-echo "APP_DIR: $APP_DIR"
-echo "DATA_PATH: $DATA_PATH"
-echo "Status: bash $APP_DIR/scripts/status.sh"
-echo "Stop:   bash $APP_DIR/scripts/stop.sh"
+  echo
+  echo "Install complete."
+  echo "LISTEN_HOST: $HOST"
+  echo "URL(Local): http://127.0.0.1:${PORT}"
+  if [ "$HOST" = "0.0.0.0" ]; then
+    echo "URL(LAN/Public): http://<your-ip>:${PORT}"
+  fi
+  echo "APP_DIR: $APP_DIR"
+  echo "DATA_PATH: $DATA_PATH"
+  echo "Status: bash $APP_DIR/scripts/status.sh"
+  echo "Stop:   bash $APP_DIR/scripts/stop.sh"
+}
+
+main() {
+  if [ "$INSTALL_STAGE" = "bootstrap" ]; then
+    bootstrap_stage
+  fi
+  deploy_stage
+}
+
+main "$@"

@@ -1,0 +1,9 @@
+ ⨯ Failed to start server
+Error: listen EPERM: operation not permitted 0.0.0.0:3456
+    at <unknown> (Error: listen EPERM: operation not permitted 0.0.0.0:3456) {
+  code: 'EPERM',
+  errno: -1,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 3456
+}
