@@ -464,8 +464,21 @@ show_runtime_diagnostics() {
   fi
 }
 
+next_available_path() {
+  local base="$1"
+  local candidate="$base"
+  local index=1
+
+  while [ -e "$candidate" ]; do
+    candidate="${base}.${index}"
+    index=$((index + 1))
+  done
+
+  printf '%s' "$candidate"
+}
+
 sync_repo_from_github() {
-  local backup_dir
+  local backup_dir tmp_clone stale_dir
   mkdir -p "$(dirname "$APP_DIR")"
 
   if [ -d "$APP_DIR/.git" ]; then
@@ -479,10 +492,20 @@ sync_repo_from_github() {
     fi
 
     if ! git -C "$APP_DIR" pull --ff-only origin "$BRANCH"; then
-      backup_dir="${APP_DIR}.bak.$(date +%s)"
+      backup_dir="$(next_available_path "${APP_DIR}.bak.$(date +%s)")"
       mv "$APP_DIR" "$backup_dir"
       echo "Local repo update failed, backup moved to: $backup_dir"
-      git clone --depth 1 --branch "$BRANCH" "$REPO_URL" "$APP_DIR"
+
+      tmp_clone="$(next_available_path "${APP_DIR}.clone.$(date +%s).$$")"
+      git clone --depth 1 --branch "$BRANCH" "$REPO_URL" "$tmp_clone"
+
+      if [ -e "$APP_DIR" ]; then
+        stale_dir="$(next_available_path "${APP_DIR}.stale.$(date +%s)")"
+        mv "$APP_DIR" "$stale_dir"
+        echo "WARN: target path unexpectedly existed, moved to: $stale_dir"
+      fi
+      mv "$tmp_clone" "$APP_DIR"
+
       if [ -d "$backup_dir/node_modules" ] && [ ! -d "$APP_DIR/node_modules" ]; then
         echo "Reusing cached node_modules from backup directory..."
         mv "$backup_dir/node_modules" "$APP_DIR/node_modules" 2>/dev/null || cp -a "$backup_dir/node_modules" "$APP_DIR/node_modules" || true
@@ -498,13 +521,20 @@ sync_repo_from_github() {
   fi
 
   if [ -d "$APP_DIR" ]; then
-    backup_dir="${APP_DIR}.bak.$(date +%s)"
+    backup_dir="$(next_available_path "${APP_DIR}.bak.$(date +%s)")"
     mv "$APP_DIR" "$backup_dir"
     echo "Existing non-git directory moved to: $backup_dir"
   fi
 
   echo "Cloning repo from GitHub to $APP_DIR"
-  git clone --depth 1 --branch "$BRANCH" "$REPO_URL" "$APP_DIR"
+  tmp_clone="$(next_available_path "${APP_DIR}.clone.$(date +%s).$$")"
+  git clone --depth 1 --branch "$BRANCH" "$REPO_URL" "$tmp_clone"
+  if [ -e "$APP_DIR" ]; then
+    stale_dir="$(next_available_path "${APP_DIR}.stale.$(date +%s)")"
+    mv "$APP_DIR" "$stale_dir"
+    echo "WARN: target path unexpectedly existed, moved to: $stale_dir"
+  fi
+  mv "$tmp_clone" "$APP_DIR"
 }
 
 try_prepare_data_path() {
