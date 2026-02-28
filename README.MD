@@ -48,6 +48,7 @@ APP_DIR=~/apps/st-manager-termux-mobile \
 DATA_PATH=/storage/emulated/0/SillyTavern/default-user \
 ST_MANAGER_HOST=127.0.0.1 \
 PORT=3456 \
+MOBILE_UI_PATCH=1 \
 bash install-termux.sh
 ```
 
@@ -58,6 +59,7 @@ bash install-termux.sh
 - `DATA_PATH`：SillyTavern 数据根目录
 - `ST_MANAGER_HOST`：监听地址，建议固定 `127.0.0.1`
 - `PORT`：服务端口
+- `MOBILE_UI_PATCH`：是否注入移动端 UI 适配补丁（默认 `1`，设为 `0` 可关闭）
 
 ## 日常运维
 
@@ -157,6 +159,27 @@ touch "$P/.rwtest" && rm "$P/.rwtest"
 1. 关闭 Termux 电池优化
 2. 执行 `termux-wake-lock`
 3. 启用 runit 守护 + 定时巡检
+
+### 5) 移动端 UI 适配补丁如何关闭或回退
+
+默认会自动注入移动端 UI 样式补丁：
+
+```bash
+bash scripts/patch-mobile-ui.sh
+```
+
+关闭自动注入：
+
+```bash
+MOBILE_UI_PATCH=0 bash install-termux.sh
+MOBILE_UI_PATCH=0 bash scripts/start.sh
+```
+
+移除已注入补丁：
+
+```bash
+bash scripts/patch-mobile-ui.sh --remove
+```
 
 ## 升级与回滚
 

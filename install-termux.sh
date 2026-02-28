@@ -9,6 +9,7 @@ INSTALL_STAGE="${INSTALL_STAGE:-bootstrap}"
 ST_MANAGER_HOST_INPUT="${ST_MANAGER_HOST:-}"
 HOST="${ST_MANAGER_HOST_INPUT:-127.0.0.1}"
 PORT="${PORT:-3456}"
+MOBILE_UI_PATCH="${MOBILE_UI_PATCH:-1}"
 
 DATA_PATH_INPUT="${DATA_PATH:-}"
 DATA_PATH=""
@@ -658,6 +659,7 @@ bootstrap_stage() {
     NPM_INSTALL_RETRY_DELAY_SECONDS="$NPM_INSTALL_RETRY_DELAY_SECONDS" \
     NPM_REGISTRY_PRIMARY="$NPM_REGISTRY_PRIMARY" \
     NPM_REGISTRY_FALLBACK="$NPM_REGISTRY_FALLBACK" \
+    MOBILE_UI_PATCH="$MOBILE_UI_PATCH" \
     bash "$APP_DIR/install-termux.sh"
 }
 
@@ -680,6 +682,14 @@ CONFIG_EOF
   echo "[3/6] Install Node dependencies for mobile runtime"
   install_node_dependencies
   ensure_webpack_runtime
+
+  if [ "$MOBILE_UI_PATCH" != "0" ]; then
+    if ! bash "$APP_DIR/scripts/patch-mobile-ui.sh"; then
+      echo "WARN: mobile UI patch failed; continuing install."
+    fi
+  else
+    echo "MOBILE_UI_PATCH=0, skipping mobile UI patch."
+  fi
 
   echo "[4/6] Apply executable permissions"
   chmod +x "$APP_DIR/install-termux.sh"

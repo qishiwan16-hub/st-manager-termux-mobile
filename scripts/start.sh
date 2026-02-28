@@ -31,6 +31,14 @@ if command -v node >/dev/null 2>&1; then
   node "$APP_DIR/scripts/sanitize-prerender.js" "$APP_DIR" settings worlds || true
 fi
 
+if [ "${MOBILE_UI_PATCH:-1}" != "0" ]; then
+  if [ -f "$APP_DIR/scripts/patch-mobile-ui.sh" ]; then
+    if ! bash "$APP_DIR/scripts/patch-mobile-ui.sh"; then
+      echo "WARN: patch-mobile-ui failed, continuing startup."
+    fi
+  fi
+fi
+
 LOG_FILE="$LOG_DIR/app-$DATE_TAG.log"
 
 PORT_PID=""
