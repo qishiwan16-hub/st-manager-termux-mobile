@@ -597,21 +597,27 @@ CONFIG_EOF
   chmod +x "$APP_DIR/termux/runit/st-manager/run" "$APP_DIR/termux/runit/st-manager/log/run"
 
   echo "[5/6] Start service and run healthcheck"
+  local latest_log
   PORT="$PORT" bash "$APP_DIR/scripts/stop.sh" >/dev/null 2>&1 || true
   if ! ST_MANAGER_HOST="$HOST" PORT="$PORT" NODE_ENV=production DATA_ROOT="$DATA_PATH" bash "$APP_DIR/scripts/start.sh"; then
-    echo
-    echo "Initial start failed. Dumping diagnostics..."
-    show_runtime_diagnostics
-
-    local latest_log
     latest_log="$(ls -1t "$APP_DIR"/logs/app-*.log 2>/dev/null | head -n 1 || true)"
-    if [ -n "${latest_log:-}" ] && grep -Eq "EADDRINUSE|address already in use" "$latest_log"; then
+    if [ "$HOST" = "0.0.0.0" ] && [ -n "${latest_log:-}" ] && grep -Eq "listen (EPERM|EACCES): operation not permitted 0.0.0.0:${PORT}" "$latest_log"; then
+      echo
+      echo "Public bind failed in current environment, fallback to localhost (127.0.0.1)."
+      HOST="127.0.0.1"
+      PORT="$PORT" bash "$APP_DIR/scripts/stop.sh" >/dev/null 2>&1 || true
+      sleep 1
+      ST_MANAGER_HOST="$HOST" PORT="$PORT" NODE_ENV=production DATA_ROOT="$DATA_PATH" bash "$APP_DIR/scripts/start.sh"
+    elif [ -n "${latest_log:-}" ] && grep -Eq "EADDRINUSE|address already in use" "$latest_log"; then
       echo
       echo "Detected port conflict, attempting one automatic restart..."
       PORT="$PORT" bash "$APP_DIR/scripts/stop.sh" >/dev/null 2>&1 || true
       sleep 1
       ST_MANAGER_HOST="$HOST" PORT="$PORT" NODE_ENV=production DATA_ROOT="$DATA_PATH" bash "$APP_DIR/scripts/start.sh"
     else
+      echo
+      echo "Initial start failed. Dumping diagnostics..."
+      show_runtime_diagnostics
       exit 1
     fi
   fi

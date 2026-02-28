@@ -1,0 +1,20 @@
+   ▲ Next.js 15.5.12
+   - Local:        http://localhost:3456
+   - Network:      http://0.0.0.0:3456
+
+ ✓ Starting...
+ ✓ Ready in 246ms
+TypeError: c.t is not a function
+    at 96425 (.next/server/chunks/852.js:10:23603)
+    at __webpack_require__ (.next/server/webpack-runtime.js:24:3)
+    at 35284 (.next/server/chunks/653.js:1:3898)
+    at __webpack_require__ (.next/server/webpack-runtime.js:24:3)
+    at 39377 (.next/server/app/chats/page.js:2:10952)
+    at Function.__webpack_require__ (.next/server/webpack-runtime.js:24:3)
+ ⨯ unhandledRejection:  TypeError: c.t is not a function
+    at 96425 (.next/server/chunks/852.js:10:23603)
+    at __webpack_require__ (.next/server/webpack-runtime.js:24:3)
+    at 35284 (.next/server/chunks/653.js:1:3898)
+    at __webpack_require__ (.next/server/webpack-runtime.js:24:3)
+    at 39377 (.next/server/app/chats/page.js:2:10952)
+    at Function.__webpack_require__ (.next/server/webpack-runtime.js:24:3)

@@ -29,6 +29,15 @@ if command -v lsof >/dev/null 2>&1; then
   fi
 fi
 
+if [ "$STOPPED" -eq 0 ] && command -v ss >/dev/null 2>&1; then
+  SS_PIDS="$(ss -ltnp 2>/dev/null | awk -v p=":$PORT" '$4 ~ p {print}' | sed -n 's/.*pid=\([0-9]\+\).*/\1/p' | sort -u || true)"
+  if [ -n "${SS_PIDS:-}" ]; then
+    echo "$SS_PIDS" | xargs -r kill || true
+    STOPPED=1
+    echo "st-manager stopped by ss port scan ($PORT)"
+  fi
+fi
+
 if [ "$STOPPED" -eq 0 ]; then
   echo "st-manager is not running"
 fi
