@@ -13,7 +13,7 @@ FORCE_NPM_INSTALL="${FORCE_NPM_INSTALL:-0}"
 SHARED_STORAGE_READY=0
 
 dependency_signature() {
-  local hash_cmd
+  local hash_cmd=""
   local node_ver
   local npm_ver
   node_ver="$(node -v 2>/dev/null || echo unknown-node)"
@@ -23,23 +23,32 @@ dependency_signature() {
     hash_cmd="sha256sum"
   elif command -v shasum >/dev/null 2>&1; then
     hash_cmd="shasum -a 256"
-  else
+  elif command -v md5sum >/dev/null 2>&1; then
     hash_cmd="md5sum"
+  else
+    # Last-resort fallback when hash utilities are unavailable.
+    node -e 'const fs=require("fs");const crypto=require("crypto");const app=process.argv[1];const nodeV=process.argv[2];const npmV=process.argv[3];let s=`node=${nodeV}\nnpm=${npmV}\n`;for(const f of ["package.json","package-lock.json"]){const p=`${app}/${f}`;if(fs.existsSync(p))s+=fs.readFileSync(p,"utf8")}process.stdout.write(crypto.createHash("sha256").update(s).digest("hex"))' "$APP_DIR" "$node_ver" "$npm_ver"
+    return 0
   fi
 
   {
     echo "node=$node_ver"
     echo "npm=$npm_ver"
-    [ -f "$APP_DIR/package.json" ] && cat "$APP_DIR/package.json"
-    [ -f "$APP_DIR/package-lock.json" ] && cat "$APP_DIR/package-lock.json"
-  } | eval "$hash_cmd" | awk '{print $1}'
+    if [ -f "$APP_DIR/package.json" ]; then
+      cat "$APP_DIR/package.json"
+    fi
+    if [ -f "$APP_DIR/package-lock.json" ]; then
+      cat "$APP_DIR/package-lock.json"
+    fi
+    :
+  } | sh -c "$hash_cmd" | awk '{print $1}'
 }
 
 install_node_dependencies() {
   local stamp_file="$APP_DIR/.deps-installed.sig"
   local sig_current
   local sig_saved=""
-  local npm_cmd="npm install --omit=dev"
+  local use_npm_ci=0
 
   sig_current="$(dependency_signature)"
   [ -f "$stamp_file" ] && sig_saved="$(cat "$stamp_file" 2>/dev/null || true)"
@@ -50,12 +59,21 @@ install_node_dependencies() {
   fi
 
   if [ -f "$APP_DIR/package-lock.json" ]; then
-    npm_cmd="npm ci --omit=dev"
+    use_npm_ci=1
   fi
 
-  echo "Installing dependencies with: $npm_cmd"
+  if [ "$use_npm_ci" = "1" ]; then
+    echo "Installing dependencies with: npm ci --omit=dev"
+  else
+    echo "Installing dependencies with: npm install --omit=dev"
+  fi
+
   cd "$APP_DIR"
-  eval "$npm_cmd"
+  if [ "$use_npm_ci" = "1" ]; then
+    npm ci --omit=dev
+  else
+    npm install --omit=dev
+  fi
   echo "$sig_current" >"$stamp_file"
 }
 
